@@ -1,0 +1,189 @@
+---
+title: "Postesia population analyses"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+author: "Karina J. Nielsen"
+date: "Last compiled on `r format(Sys.time(), '%d %B %Y')`"
+output:
+   bookdown::html_document2: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  error = TRUE,
+  fig.align = "left",
+  fig.width = 8,
+  fig.height = 11,
+  dev = "png",
+  cache = T)
+
+# echo = FALSE means code will not print, by default
+# cache = TRUE saves output results of all chunks so that they do not need to be rerun
+
+```
+
+
+```{r renv-start, include = FALSE}
+#install.packages("renv")
+#renv::init() # to initialize a new project-local environment with a private R library
+#renv::restore() # to restore a project-specific library
+```
+
+```{r load packages using easypackages, include=FALSE}
+
+#reference for renv workflow: https://rstudio.github.io/renv/articles/renv.html
+my_packages <- c("knitr", "renv", "easypackages", "here", "ggthemes", "gridExtra", "tidyverse", "lubridate", "patchwork", "readxl", "survival", "survminer", "ranger", "condSURV", "ggplot2", "gtsummary", "flextable", "dplyr", "forcats", "bookdown", "googledrive", "googlesheets4") 
+# list of packages to be used in this Rmd file
+# easypackages::packages(my_packages) 
+# checks to make sure the packages needed are loaded and asks before installing to confirm install in the console window
+easypackages::libraries(my_packages) # could be used in lieu of packages() if you already have the packages installed
+
+```
+
+
+```{r Confirm working directory for project, include = FALSE}
+here::here() # use this to work with sub-directories less awkwardly and share projects across users/machines more easily.
+```
+
+
+```{r renv, include=FALSE}
+#Run this to update snapshot of packages when you commit the file
+#renv::snapshot() 
+#run as needed later in the project to capture required package versions
+#NB must respond and affirms actions in console or you will see the spinning wheel....
+
+```
+
+
+```{r read in data, include=FALSE}
+
+#read in data from googlesheet file
+pop_url <- "https://docs.google.com/spreadsheets/d/1UU4ZVFNtGX9wPg8YrwcVHOKCASZERbLxHoL7GWC3Hos/edit#gid=395307144"
+post_pop <- read_sheet(pop_url) # will ask for account access in console
+
+rcrt_url <- "https://docs.google.com/spreadsheets/d/160mIskabBabveqxF0W2zl1yK8zn14p70LDkyHMIGi-g/edit#gid=1440943028"
+post_rcrt <- read_sheet(rcrt_url) # will ask for account access in console
+
+sz_bm_url <- "https://docs.google.com/spreadsheets/d/1PokCNlykLovQSwm9HJuXuVPyr-RSu7wY9DYiBPIJxRY/edit#gid=897390894"
+post_sz_bm <- read_sheet(sz_bm_url) # will ask for account access in console
+
+```
+
+```{r wrangle}
+
+post_sz_bm <- post_sz_bm %>%
+  mutate(log_stipeD = log(post_sz_bm$stipeD)) %>%
+  mutate(log_ww = log(post_sz_bm$ww)) %>%
+  mutate(log_dw = log(post_sz_bm$dw))
+
+post_pop <- post_pop %>%
+  mutate(log_stipeD = log(post_sz_bm$stipeD))
+```
+
+```{r diam-ww-model}
+
+#fit the model
+dwmodel <- lm(log(post_sz_bm$ww)~ log(post_sz_bm$stipeD))
+
+#view the output of the model
+summary(dwmodel)
+
+```
+
+
+```{r diam-ww, fig.width = 6,  fig.height = 6, message=FALSE}
+
+diam_ww <- ggplot(post_sz_bm, aes(x=log_stipeD, y=log_ww)) +
+  geom_point( size=4, color="seagreen") +
+  geom_smooth(method=lm, se=TRUE) +
+  theme_few() 
+
+diam_ww +
+  labs(x = "log [stipe diameter (cm)]") +
+  labs(y = "log [wet weight (g)]") +
+  labs(title= "Basal diameter predicts biomass")+
+  labs(subtitle = "wet weight(g) = 17.6 + stipe diameter(cm)^2.7, r2 = 0.99")
+
+```
+```{r dw-ww-model}
+
+#fit the model
+dwwwmodel <- lm(post_sz_bm$dw~ post_sz_bm$ww)
+
+#view the output of the model
+summary(dwwwmodel)
+
+```
+
+
+```{r diam-ww, fig.width = 6,  fig.height = 6, message=FALSE}
+
+dw_ww <- ggplot(post_sz_bm, aes(x=ww, y=dw)) +
+  geom_point( size=4, color="seagreen") +
+  geom_smooth(method=lm, se=TRUE) +
+  theme_few() 
+
+dw_ww +
+  labs(x = "wet weight (g)") +
+  labs(y = "dry weight (g)") +
+  labs(title= "Wet weight predicts dryweight")+
+  labs(subtitle = "dry weight(g) = -0.01 + 0.12*wet weight(g), r2 = 0.98")
+
+```
+```{r diam-dw-model}
+
+#fit the model
+ddwmodel <- lm(log(post_sz_bm$dw)~ log(post_sz_bm$stipeD))
+
+#view the output of the model
+summary(ddwmodel)
+
+```
+
+
+```{r diam-dw, fig.width = 5,  fig.height = 5, message=FALSE}
+
+diam_dw <- ggplot(post_sz_bm, aes(x=log_stipeD, y=log_dw)) +
+  geom_point( size=2, color="seagreen") +
+  geom_smooth(method=lm, se=TRUE) +
+  theme_few() 
+
+diam_dw +
+  labs(x = "log [stipe diameter (cm)]") +
+  labs(y = "log [dry weight (g)]") +
+  labs(title= "Basal diameter predicts biomass")+
+  labs(subtitle = "dry weight(g) = 2.19 + stipe diameter(cm)^2.7, r2 = 0.99")
+
+```
+
+```{r summer-pop-decline-model}
+
+#fit the model
+summermodel <- lm(post_pop$aug~ post_pop$june)
+
+#view the output of the model
+summary(summermodel)
+
+```
+
+```{r popchangejun-aug, fig.width = 6,  fig.height = 6, message=F, warning=F}
+
+popJA <- ggplot(post_pop, aes(x=june, y=aug)) +
+  geom_point( size=2, color ="seagreen") +
+  geom_smooth(method=lm, se=TRUE) +
+  theme_few() 
+
+popJA +
+  labs(x = "population size in June (2007-2009)") +
+  labs(y = "population size in August (2007-2009)") +
+  labs(title= "Population size declines 53% between June and August")+
+  labs(subtitle = "August = 43 + 0.53*June, r2 = 0.86")
+  
+
+
+```
+
