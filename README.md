@@ -1,5 +1,5 @@
-# Postelsia palmaeformis population data analysis
-Location: Sonoma and Mendocino counties   
+# **Postelsia palmaeformis** population study
+Locations: California: Sonoma and Mendocino counties; Newport, Oregon   
 Years: 2007-2009  
-Collaborators: Heather Knoll and Sarah Ann Thompson  
+Collaborators: Sarah Ann Thompson, Heather Knoll, Carol Blanchette
 Funding: California Sea Grant  
