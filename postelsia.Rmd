@@ -116,7 +116,7 @@ diam_ww <- ggplot(post_sz_bm, aes(x=log_stipeD, y=log_ww)) +
 diam_ww +
   labs(x = "log [stipe diameter (cm)]") +
   labs(y = "log [wet weight (g)]") +
-  labs(title= "Basal diameter predicts biomass")+
+  labs(title= "Stipe diameter at the base predicts wet weight")+
   labs(subtitle = "wet weight(g) = 17.6 + stipe diameter(cm)^2.7, r2 = 0.99")
 
 ```
@@ -136,12 +136,12 @@ summary(dwwwmodel)
 dw_ww <- ggplot(post_sz_bm, aes(x=ww, y=dw)) +
   geom_point( size=4, color="seagreen") +
   geom_smooth(method=lm, se=TRUE) +
-  theme_few() 
+  theme_few()
 
 dw_ww +
   labs(x = "wet weight (g)") +
   labs(y = "dry weight (g)") +
-  labs(title= "Wet weight predicts dryweight")+
+  labs(title= "Wet weight predicts dry weight")+
   labs(subtitle = "dry weight(g) = -0.01 + 0.12*wet weight(g), r2 = 0.98")
 
 ```
@@ -156,7 +156,7 @@ summary(ddwmodel)
 ```
 
 
-```{r diam-dw, fig.width = 5,  fig.height = 5, message=FALSE}
+```{r diam-dw, fig.width = 5,  fig.height = 5, message=FALSE, include=TRUE}
 
 diam_dw <- ggplot(post_sz_bm, aes(x=log_stipeD, y=log_dw)) +
   geom_point( size=2, color="seagreen") +
@@ -166,7 +166,7 @@ diam_dw <- ggplot(post_sz_bm, aes(x=log_stipeD, y=log_dw)) +
 diam_dw +
   labs(x = "log [stipe diameter (cm)]") +
   labs(y = "log [dry weight (g)]") +
-  labs(title= "Basal diameter predicts biomass")+
+  labs(title= "Postelsia stipe diameter predicts biomass")+
   labs(subtitle = "dry weight(g) = 2.19 + stipe diameter(cm)^2.7, r2 = 0.99")
 
 ```
@@ -183,7 +183,7 @@ pred.aug <- predict(summermodel, terms = c("jun"))
 
 ```
 
-```{r popchangejun-aug, fig.width = 6,  fig.height = 6, message=F, warning=F}
+```{r popchangejun-aug, fig.width = 6,  fig.height = 6, message=F, warning=F, include =TRUE}
 
 popJA <- ggplot(post_pop, aes(x=jun, y=aug)) +
   geom_point( size=2, color="seagreen") +
@@ -199,9 +199,9 @@ popJA +
 
 
 ```
-```{r trim-d, fig.width = 6,  fig.height = 6}
+```{r trim-d}
 
-bm_model <- lmer(augD ~ trim_all + yr_f +(1|site_code), data = post_pop)
+bm_model <- lmer(augD ~ trim_all + yr_f + th +(1|site_code), data = post_pop)
 summary(bm_model)
 plot(bm_model)
 ranef(bm_model)
@@ -217,10 +217,52 @@ bm_tab %>%
   as_flex_table()
 
 
+
 ```
+```{r trim-d-table, fig.width = 6,  fig.height = 6, message=FALSE, Include =TRUE}
+
+bm_tab <- tbl_regression(bm_model)
+
+bm_tab %>%
+  add_global_p()%>% 
+  bold_labels() %>% 
+  italicize_levels()%>%
+  as_flex_table()
+
+
+```
+```{r plot-bm_model-fit, fig.width = 10,  fig.height = 4, }
+bm_model_fit_yr <- ggpredict(bm_model, terms = c("th", "yr_f"))
+bm_model_fit_trim <- ggpredict(bm_model, terms = c("th", "trim_all"))
+
+bm_plot_1 <-  plot(bm_model_fit_yr) +
+  theme_few()+
+  labs(x="tideal height (ft) MLLW")+
+  labs(y = "diameter (mm)")+
+  labs(colour="year")+
+  labs(title = "Modeled stipe diameter in August")
+
+bm_plot_2 <- plot(bm_model_fit_trim) +
+   theme_few()+
+  labs(x="tideal height (ft) MLLW")+
+  labs(y = "diameter (mm)")+
+  labs(colour="trim")+
+  labs(title = "Modeled stipe diameter in August")
+
+bm_plot_1 + bm_plot_2
+
+# ggplot(bm_model_fit, aes(x, predicted, color=group)) +
+#   geom_line()+
+#   facet_wrap(~facet)+
+#   theme_few()+
+#   labs(x="Tidal height (ft) MLLW")+
+#   labs(y = "Predicted stipe diameter (mm)")+
+#   labs (colour = "trim")
+
+```
+
+
 ```{r trim-h, fig.width = 6,  fig.height = 6}
-
-
 h_model <- lmer(augH ~ trim_all + yr_f + th + (1|site_code), data = post_pop)
 summary(h_model)
 plot(h_model)
@@ -228,6 +270,11 @@ ranef(h_model)
 coef(h_model)
 confint(h_model)
 
+
+```
+
+
+```{r trim-h-table, fig.width = 6,  fig.height = 6, message = FALSE }
 h_tab <- tbl_regression(h_model)
 
 h_tab %>%
@@ -237,6 +284,49 @@ h_tab %>%
   as_flex_table()
 
 ```
+
+```{r plot-h-model-fit, fig.width = 8,  fig.height = 4 }
+# h_model_fit <- ggpredict(h_model, terms = c("yr_f", "trim_all"))
+# 
+#  plot(h_model_fit) +
+#   theme_few()+
+#   labs(x="year")+
+#   labs(y = "height (cm)")+
+#   labs(colour="trim")+
+#   labs(title = "Modeled stipe heights in August")
+ 
+h_model_fit_yr <- ggpredict(h_model, terms = c("yr_f"))
+h_model_fit_trim <- ggpredict(h_model, terms = c("trim_all"))
+
+h_plot_1 <-  plot(h_model_fit_yr) +
+  theme_few()+
+  labs(x="year")+
+  labs(y = "height (cm)")+
+  labs(colour="trim")+
+  labs(title = NULL)
+ 
+ h_plot_2 <- plot(h_model_fit_trim) +
+  theme_few()+
+  labs(x="trim")+
+  labs(y = NULL)+
+  labs(colour="trim")+
+  labs(title = NULL)
+ 
+ h_plot_1 + h_plot_2
+ 
+
+# ggplot(h_model_fit, aes(x, predicted, color=group)) +
+#   geom_line()+
+#   facet_wrap(~facet)+
+#   theme_few()+
+#   labs(x="Tidal height (ft) MLLW")+
+#   labs(y = "Predicted stipe height (cm)")+
+#   labs (colour = "trim")
+
+```
+
+
+
 ```{r trim-pr, fig.width = 6,  fig.height = 6}
 
 pr_model <- glmer(augPR ~ trim_all + yr_f + th + (1|site_code), data = post_pop, family=binomial)
@@ -244,6 +334,11 @@ summary(pr_model)
 plot(pr_model)
 ranef(pr_model)
 coef(pr_model)
+
+
+```
+
+```{r trim-pr-table, message = FALSE, Include=TRUE}
 
 pr_tab <- tbl_regression(pr_model, exp=TRUE)
 
@@ -253,5 +348,85 @@ pr_tab %>%
   italicize_levels()%>%
   as_flex_table()
 
+```
+
+
+
+```{r plot-pr-model-fit, fig.width = 8,  fig.height = 4, include=TREU }
+pr_model_fit_yr <- ggpredict(pr_model, terms = c("yr_f"))
+pr_model_fit_trim <- ggpredict(pr_model, terms = c("trim_all"))
+
+pr_plot_1 <-  plot(pr_model_fit_yr) +
+  theme_few()+
+  labs(x="year")+
+  labs(y = "percentage of population reproductive")+
+  labs(colour="trim")+
+  labs(title = NULL)
+ 
+ pr_plot_2 <- plot(pr_model_fit_trim) +
+  theme_few()+
+  labs(x="trim")+
+  labs(y = NULL)+
+  labs(colour="trim")+
+  labs(title = NULL)
+ 
+ pr_plot_1 + pr_plot_2
+ 
+# ggplot(pr_model_fit, aes(x, predicted, color=group)) +
+#   geom_line()+
+#   facet_wrap(~facet)+
+#   theme_few()+
+#   labs(x="Tidal height (ft) MLLW")+
+#   labs(y = "Predicted stipe diameter (mm)")+
+#   labs (colour = "trim")
 
 ```
+
+
+```{r pop, fig.width = 6,  fig.height = 6}
+
+pop_model <- lmer(jun ~ augLag + trim_all * yr_f + th + (1|site_code), data = post_pop)
+summary(pop_model)
+plot(pop_model)
+ranef(pop_model)
+coef(pop_model)
+anova(pop_model)
+
+
+
+```
+
+```{r pop-table, message = FALSE, Include = TRUE}
+
+pop_tab <- tbl_regression(pop_model)
+
+pop_tab %>%
+  add_global_p()%>% 
+  bold_labels() %>% 
+  italicize_levels()%>%
+  as_flex_table()
+
+
+```
+```{r pop-plot, message = FALSE, Include = TRUE, fig.width = 8,  fig.height = 4}
+
+pop_model_fit <- ggpredict(pop_model, terms = c("augLag", "trim_all", "yr_f"))
+
+plot(pop_model_fit)+
+  theme_few()+
+  labs(colour="trim")+
+   labs(x="August population size (prior year)")+
+   labs(y = "June population size")+
+  labs (title="Modeled recruitment")
+  
+
+# ggplot(pop_model_fit, aes(x, predicted, color=group)) +
+#   geom_line()+
+#   facet_wrap(~facet)+
+#   theme_few()+
+#   labs(x="August population size (prior year)")+
+#   labs(y = "June population size")+
+#   labs (colour = "trim")
+
+```
+
