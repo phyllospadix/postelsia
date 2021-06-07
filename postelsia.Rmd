@@ -36,7 +36,7 @@ knitr::opts_chunk$set(
 ```{r load packages using easypackages, include=FALSE}
 
 #reference for renv workflow: https://rstudio.github.io/renv/articles/renv.html
-my_packages <- c("knitr", "renv", "easypackages", "here", "ggthemes", "gridExtra", "tidyverse", "lubridate", "patchwork", "readxl", "survival", "survminer", "ranger", "condSURV", "ggplot2", "gtsummary", "flextable", "dplyr", "forcats", "bookdown", "googledrive", "googlesheets4") 
+my_packages <- c("knitr", "renv", "easypackages", "here", "ggthemes", "gridExtra", "tidyverse", "lubridate", "patchwork", "readxl", "survival", "survminer", "ranger", "condSURV", "ggplot2", "gtsummary", "flextable", "dplyr", "forcats", "bookdown", "googledrive", "googlesheets4", "lme4", "ggeffects", "sjPlot", "effects") 
 # list of packages to be used in this Rmd file
 # easypackages::packages(my_packages) 
 # checks to make sure the packages needed are loaded and asks before installing to confirm install in the console window
@@ -52,7 +52,7 @@ here::here() # use this to work with sub-directories less awkwardly and share pr
 
 ```{r renv, include=FALSE}
 #Run this to update snapshot of packages when you commit the file
-#renv::snapshot() 
+renv::snapshot() 
 #run as needed later in the project to capture required package versions
 #NB must respond and affirms actions in console or you will see the spinning wheel....
 
@@ -81,7 +81,18 @@ post_sz_bm <- post_sz_bm %>%
   mutate(log_dw = log(post_sz_bm$dw))
 
 post_pop <- post_pop %>%
-  mutate(log_stipeD = log(post_sz_bm$stipeD))
+  mutate(trim_all = factor(ifelse(post_pop$trim > 0, 1, 0))) %>%
+  mutate (yr_f = factor(post_pop$yr)) %>% 
+  mutate (site_code_f = factor(post_pop$site_code)) %>% 
+  mutate(trim = factor(post_pop$trim))
+
+
+post_rcrt <- post_rcrt %>%
+  mutate(trim_all = factor(ifelse(post_rcrt$trim > 0, 1, 0))) %>%
+  mutate (yr_f = factor(post_rcrt$yr)) %>% 
+  mutate (site_code_f = factor(post_rcrt$site_code)) %>% 
+  mutate(trim = factor(post_rcrt$trim))
+
 ```
 
 ```{r diam-ww-model}
@@ -163,17 +174,19 @@ diam_dw +
 ```{r summer-pop-decline-model}
 
 #fit the model
-summermodel <- lm(post_pop$aug~ post_pop$june)
+summermodel <- lm(post_pop$aug~ post_pop$jun)
 
 #view the output of the model
 summary(summermodel)
+#extract predicted values
+pred.aug <- predict(summermodel, terms = c("jun"))
 
 ```
 
 ```{r popchangejun-aug, fig.width = 6,  fig.height = 6, message=F, warning=F}
 
-popJA <- ggplot(post_pop, aes(x=june, y=aug)) +
-  geom_point( size=2, color ="seagreen") +
+popJA <- ggplot(post_pop, aes(x=jun, y=aug)) +
+  geom_point( size=2, color="seagreen") +
   geom_smooth(method=lm, se=TRUE) +
   theme_few() 
 
@@ -186,4 +199,59 @@ popJA +
 
 
 ```
+```{r trim-d, fig.width = 6,  fig.height = 6}
 
+bm_model <- lmer(augD ~ trim_all + yr_f +(1|site_code), data = post_pop)
+summary(bm_model)
+plot(bm_model)
+ranef(bm_model)
+coef(bm_model)
+confint(bm_model)
+
+bm_tab <- tbl_regression(bm_model)
+
+bm_tab %>%
+  add_global_p()%>% 
+  bold_labels() %>% 
+  italicize_levels()%>%
+  as_flex_table()
+
+
+```
+```{r trim-h, fig.width = 6,  fig.height = 6}
+
+
+h_model <- lmer(augH ~ trim_all + yr_f + th + (1|site_code), data = post_pop)
+summary(h_model)
+plot(h_model)
+ranef(h_model)
+coef(h_model)
+confint(h_model)
+
+h_tab <- tbl_regression(h_model)
+
+h_tab %>%
+  add_global_p()%>% 
+  bold_labels() %>% 
+  italicize_levels()%>%
+  as_flex_table()
+
+```
+```{r trim-pr, fig.width = 6,  fig.height = 6}
+
+pr_model <- glmer(augPR ~ trim_all + yr_f + th + (1|site_code), data = post_pop, family=binomial)
+summary(pr_model)
+plot(pr_model)
+ranef(pr_model)
+coef(pr_model)
+
+pr_tab <- tbl_regression(pr_model, exp=TRUE)
+
+pr_tab %>%
+  add_global_p()%>% 
+  bold_labels() %>% 
+  italicize_levels()%>%
+  as_flex_table()
+
+
+```
