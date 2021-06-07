@@ -131,7 +131,7 @@ summary(dwwwmodel)
 ```
 
 
-```{r diam-ww, fig.width = 6,  fig.height = 6, message=FALSE}
+```{r diam-ww-fig, fig.width = 6,  fig.height = 6, message=FALSE}
 
 dw_ww <- ggplot(post_sz_bm, aes(x=ww, y=dw)) +
   geom_point( size=4, color="seagreen") +
@@ -156,7 +156,7 @@ summary(ddwmodel)
 ```
 
 
-```{r diam-dw, fig.width = 5,  fig.height = 5, message=FALSE, include=TRUE}
+```{r diam-dw-fig, fig.width = 5,  fig.height = 5, message=FALSE, include=TRUE}
 
 diam_dw <- ggplot(post_sz_bm, aes(x=log_stipeD, y=log_dw)) +
   geom_point( size=2, color="seagreen") +
