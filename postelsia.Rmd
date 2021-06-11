@@ -1,5 +1,5 @@
 ---
-title: "Postesia population analyses"
+title: "Postesia palmaeformis (sea palm) population analyses to inform management"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
@@ -71,21 +71,25 @@ post_rcrt <- read_sheet(rcrt_url) # will ask for account access in console
 sz_bm_url <- "https://docs.google.com/spreadsheets/d/1PokCNlykLovQSwm9HJuXuVPyr-RSu7wY9DYiBPIJxRY/edit#gid=897390894"
 post_sz_bm <- read_sheet(sz_bm_url) # will ask for account access in console
 
+cbbindex_url <- "https://docs.google.com/spreadsheets/d/1DXqrGHmB313JACIkUZg-MIeuYNnyaP8QC20mbum13eQ/edit#gid=0"
+cbbindex <- read_sheet(cbbindex_url) # will ask for account access in console
+
 ```
 
 ```{r wrangle}
 
+#log transformations
 post_sz_bm <- post_sz_bm %>%
   mutate(log_stipeD = log(post_sz_bm$stipeD)) %>%
   mutate(log_ww = log(post_sz_bm$ww)) %>%
   mutate(log_dw = log(post_sz_bm$dw))
 
+#make factors
 post_pop <- post_pop %>%
   mutate(trim_all = factor(ifelse(post_pop$trim > 0, 1, 0))) %>%
   mutate (yr_f = factor(post_pop$yr)) %>% 
   mutate (site_code_f = factor(post_pop$site_code)) %>% 
   mutate(trim = factor(post_pop$trim))
-
 
 post_rcrt <- post_rcrt %>%
   mutate(trim_all = factor(ifelse(post_rcrt$trim > 0, 1, 0))) %>%
@@ -93,9 +97,37 @@ post_rcrt <- post_rcrt %>%
   mutate (site_code_f = factor(post_rcrt$site_code)) %>% 
   mutate(trim = factor(post_rcrt$trim))
 
+#make factor with specific order
+cbbindex <- cbbindex %>%
+mutate(cbbindex, month = factor(cbbindex$month, levels=c("jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec")))
+
+cbbindex <- cbbindex %>%
+mutate(cbbindex, r_month = factor(cbbindex$month, levels=c("dec",
+    "nov",
+    "oct",
+    "sep",
+    "aug",
+    "jul",
+    "jun",
+    "may",
+    "apr",
+    "mar",
+    "feb",
+    "jan")))
 ```
 
-```{r diam-ww-model}
+```{r diam-ww-model, include =F}
 
 #fit the model
 dwmodel <- lm(log(post_sz_bm$ww)~ log(post_sz_bm$stipeD))
@@ -106,7 +138,7 @@ summary(dwmodel)
 ```
 
 
-```{r diam-ww, fig.width = 6,  fig.height = 6, message=FALSE}
+```{r diam-ww, fig.width = 6,  fig.height = 6, message=FALSE, include =F}
 
 diam_ww <- ggplot(post_sz_bm, aes(x=log_stipeD, y=log_ww)) +
   geom_point( size=4, color="seagreen") +
@@ -120,7 +152,8 @@ diam_ww +
   labs(subtitle = "wet weight(g) = 17.6 + stipe diameter(cm)^2.7, r2 = 0.99")
 
 ```
-```{r dw-ww-model}
+
+```{r dw-ww-model, include =F}
 
 #fit the model
 dwwwmodel <- lm(post_sz_bm$dw~ post_sz_bm$ww)
@@ -131,7 +164,7 @@ summary(dwwwmodel)
 ```
 
 
-```{r diam-ww-fig, fig.width = 6,  fig.height = 6, message=FALSE}
+```{r diam-ww-fig, fig.width = 6,  fig.height = 6, message=FALSE, include =F}
 
 dw_ww <- ggplot(post_sz_bm, aes(x=ww, y=dw)) +
   geom_point( size=4, color="seagreen") +
@@ -145,7 +178,9 @@ dw_ww +
   labs(subtitle = "dry weight(g) = -0.01 + 0.12*wet weight(g), r2 = 0.98")
 
 ```
-```{r diam-dw-model}
+
+
+```{r diam-dw-model, include =F}
 
 #fit the model
 ddwmodel <- lm(log(post_sz_bm$dw)~ log(post_sz_bm$stipeD))
@@ -155,6 +190,55 @@ summary(ddwmodel)
 
 ```
 
+## Introduction
+
+This document presents a summary of previously published research and an analysis of related unpublished data collected in part by Heather Knolls, Sarah Ann Thompson, Carol Blanchette, and Karina Nielsen as part of a CA Sea Grant funded project to examine the role of artisnal commercial harvesting on **Postelsia palmaeformis** populations in California. The California Fish and Game Commission is considering recent proposals for a moratorium on commercial harvesting due to an apparent decline of **Postelsia palmaeformis** populations. These declines are concurrent with the collapse of northern California kelp forest ecosystems as a result of the combined impacts of multiple ecological stressors, including recent marine heat waves, sea star wasting disease, and the expansion of urchin barrens. Questions have arisen as to the possible socio-ecological benefits and costs of a closure of commercial harvesting of sea palm. The open science data analyses presented here are shared with the goal of supporting wise stewardship decisions and providing the various stakeholders with useful information to inform their thinking. The data and code used to create this document and conduct analyses of unpublished data are available in this public repository.       
+
+## A little about the biology and ecology of **Postelsia palmaeformis** sea palms
+
+The sea palm **Postelsia palmaeformis** is an intertidal kelp (a brown macroalga in the Order Laminariales). It is only found on the west coast of North America. It is a traditional food eaten by Indigenous Peoples (Tolowa Dee-ni' Nation, et al. 2017). They are also increasingly popular as a local and wild-sourced food product harvested by a growing number of artisanal seaweed harvesters in northern California. In California, recreational harvest is prohibited, scientific collections require a special authorization, and non-mechanized commercial harvest is allowed with the purchase of a commercial edible seaweed harvesting license. The number of commercial licenses, amount of **Postelsia** harvested, method of its harvest, and the locations where harvesting is allowed, except for marine protected areas, are not regulated. There is also no provision for Indigenous Peoples rights to traditional use of **Postelsia**.
+
+**Postelsia palmaeformis** is an annual species with a heteromorphic life history (similar to ferns) alternating between two stages: 1) a microscopic, filamentous gametophyte and 2) a macroscopic sporophyte resembling a miniature palm tree. **Postelsia palmaeformis** (hereafter **Postelsia**) populations are patchily distributed in the intertidal zone of very wave-exposed rocky shores. It's physiological ecology contributes to its limited distribution (Nielsen et al. 2006), but it's patchy population structure and meta-population dynamics are mediated by wave-driven disturbances (Dayton 1973, Paine 1979, Blanchette 1996). **Postelsia** populations form a sheltering canopy for a variety of smaller intertidal organisms including snails and limpets, and other seaweeds. Black oystercatchers and other shorebirds forage these smaller invertebrates on wave exposed shores where sea palm populations occur.
+
+**Postelsia** forms dynamic, usually persistent meta-populations, due to its annual, disturbance-mediated life history and the very short dispersal distance of its reproductive propagules, or zoospores. Local populations can and do go extinct but are routinely repopulated by propagules from nearby populations. However, they can also remain locally extinct for decades to centuries if there are no nearby populations (within 20-30 meters) (Paine et al. 2017). 
+
+
+**Postelsia’s** annual life history ![](https://web.archive.org/web/20070714142300im_/http://www.mbari.org/staff/conn/botany/browns/saraho/lifeani.gif) begins with the germination of haploid zoospores shed from sori that develop on the fronds of mature thalli (or "plants"). These grow into the cryptic male and female gametophytes. Sporophytes develop from the fusion of haploid gametes on the female gametophyte. They grow and typically become apparent on the shore between February and March in clusters of small plants. They grow rapidly and develop reproductive stripes or sori on their fronds around June, but timing varies with latitude, harvesting, and differences in environmental conditions among years (Thompson et al. 2010, Nielsen et al. unpublished data). 
+
+During summer and fall when sea palms are reproductive, spores are released during low tide from sori and dripple down the grooved fronds. They usually do not disperse further than 1.5 meters from  the parent plants (Paine et al. 2017). When the sporophytes become reproductive, they also appear to stop investing in growth or re-growth of fronds (Nielsen et al. 2010). They do not regrow if the stipe ("stem") is cut or breaks off, as the grwoth region (meristem) is located at the base of the fronds above the top of the stipe. The mature sporophytes begin obvious senesence in the field in the late fall. Most are eventually torn off the rocks by winter storms (Dayton 1973, Paine 1979, Blanchette 1996). They are important primary producers with high rates of productivity and their dislodged thalli from throughout the year help fuel  wrack-dependent food webs on sandy beaches (Leigh et al. 1987, Leibowitz et al. 2016). 
+
+
+## What we learned about how frond harvesting affects the growth, reproductive ecology, and population biology of sea palms
+
+In 2010 Thompson et al. reported on two experiments done to evaluate the ecological consequences of commercial frond harvesting on **Postelsia**. Commercial harvesters use a frond trimming method they claim is sustainable because the fronds regrow, and that this also allows for multiple harvest per year. In the first experiment Thompson et al. assessed this by examining how frond regrowth and spore production at two sites, one in central and one in norther California, were impacted by frond harvesting at different times and frequencies over the spring and summer. In the second experiment they investigated how frond harvesting influenced 32 sea palm populations across four sites in northern California. 
+
+The bottom line of these two experiments done over two years for **Postelsia** populations, is that frond harvesting, whether done once in the spring or twice over the spring and summer reduced the size of populations. Recruitment was 38% greater in populations not subjected to trimming and population sizes were reduced by 40-50% when trimmed. The evidence of reduced frond sizes and dramatically reduced spore production as a result of frond harvesting, especially when done in the summer, is consistent with the reduction in population size of the harvested populations. 
+Thompson et al. (2010) discussed a range of management approaches that would apply precautionary principles to protect sea palm populations from the risks of unregulated or unanticipated growth in commercial seaweed harvesting. They recommended that: 1) the non-lethal frond trimming method be required for **Postelsia** as a condition of the commercial harvest license; 2) harvest of fronds from **Postelsia** populations should be limited to once a year; and 3) the the commercial harvest season for **POstelsia** should be closed before the onset of reproduction when fronds are not able to regrow.
+
+Additional important ecological information on biogeographic variation and the annual cycle and phenology of growth and reproduction from these studies is summarized in the following three paragraphs and may be useful to managers and other stakeholders. 
+
+Frond area was smaller and reproductive output was lower overall at the southern site. The fronds of unharvested sea palms were largest between June and July, and reached their maximum size at the southern site about a month earlier. The southern site, Piedras Blancas, was near the biogeographic range limit for the species at the time of the study and differences in environmental conditions between the regions may be contributing to these differences in ecologicall performance. 
+
+Frond harvesting reduced frond area overall, regardless of when trimming was done or how often it was done. Fronds cut in the spring were able to regrow, while those cut in late July, after the onset of reproduction, did not. Between October and November as the sea palms started to visibly senesce and degrade, fronds from both locations and all treatments were much smaller and there were no discernible differences among the groups.
+
+Reproductive output of viable spores for most individuals did not begin until late July at both sites, just after the fronds obtained their maximum size. It was greatest between September and October overall. At Point Cabrillo, the northern California site, sea palms trimmed in late July for either the first or second time had dramatically reduced reproductive output in September, compared to those not harvested at all. At the southern site, observations made in October were qualitatively similar. 
+
+## New analyses shed additional light on the interaction between population dynamics, frond harvesting, and interannual nvariation in environmental conditions 
+
+ALthough Thompson et al. (2010) did not have data to evaluate how interannual variation in ocean and environmental conditions, or climate change, might affect their conclusions, the team did continue their research on the 32 **Postelsia** populations, and related studies, for an additional two years. 
+
+### References
+
+A public zotero library
+https://www.zotero.org/groups/4289135/postelsia_palmaeformis/library
+
+EXTRA BITS
+They were intended to be published as a masters of science thesis that was almost fully drafted, but was not ultimately completed due to extenuating circumstances. A recent analysis by concluded that re-population of locally extinct populations was exceedingly rare on ecological time-scales when nearby populations were more than 20 meters away. 
+
+
+### Relationship between **Postelsia** biomass and the diamater of the base of the stipe.
+  
+Twenty two individual thalli were collected from Fogarty Creek in Newport, Oregon to assess the relationship between the biomass (dry weight (g)) and stipe diameter and length. These two measurements are straightforward and convenient to measure in the field without sacrificing thalli. We found that stipe diameter measured at the base of the thallus just above the holdfast was a strong predicted of biomass. This is consistent with observations made by other research teams working on the outer coast of Washington (pers. correspondence to KJN).  
 
 ```{r diam-dw-fig, fig.width = 5,  fig.height = 5, message=FALSE, include=TRUE}
 
@@ -171,7 +255,9 @@ diam_dw +
 
 ```
 
-```{r summer-pop-decline-model}
+
+
+```{r summer-pop-decline-model, include =F}
 
 #fit the model
 summermodel <- lm(post_pop$aug~ post_pop$jun)
@@ -183,7 +269,10 @@ pred.aug <- predict(summermodel, terms = c("jun"))
 
 ```
 
-```{r popchangejun-aug, fig.width = 6,  fig.height = 6, message=F, warning=F, include =TRUE}
+
+The size (number of individuals) of isolated Postelsia populations consistently declined over the summer months of three years (2007, 2008, 2009) by about 50% regardless with no difference among years or with respect to frond harvesting. This is likely a natural thinning process due to the dislodgement of larger or poorly-attached thalli by waves. Crowding and resulting etiolated growth or intraspecific competition for light may also contribute. 
+
+```{r popchangejun-aug, fig.width = 5,  fig.height = 5, message=F, warning=F, include =TRUE}
 
 popJA <- ggplot(post_pop, aes(x=jun, y=aug)) +
   geom_point( size=2, color="seagreen") +
@@ -193,13 +282,13 @@ popJA <- ggplot(post_pop, aes(x=jun, y=aug)) +
 popJA +
   labs(x = "population size in June (2007-2009)") +
   labs(y = "population size in August (2007-2009)") +
-  labs(title= "Population size declines 53% between June and August")+
+  labs(title= "Populations get smaller over the summer (~by half)")+
   labs(subtitle = "August = 43 + 0.53*June, r2 = 0.86")
   
 
 
 ```
-```{r trim-d}
+```{r trim-d, include =T}
 
 bm_model <- lmer(augD ~ trim_all + yr_f + th +(1|site_code), data = post_pop)
 summary(bm_model)
@@ -207,44 +296,49 @@ plot(bm_model)
 ranef(bm_model)
 coef(bm_model)
 confint(bm_model)
-
-bm_tab <- tbl_regression(bm_model)
-
-bm_tab %>%
-  add_global_p()%>% 
-  bold_labels() %>% 
-  italicize_levels()%>%
-  as_flex_table()
+```
 
 
+## Effects of tidal height, interannual environmental variation, and frond trimming on **Postelsia** biomass, size, and reproductive status. 
+
+The diameter of the stipe at the base of a Postelsia thallus (hereafter "plant"), predicts the dry weight or biomass of the plant (see figure above). Using that metric, we found that plants from  populations higher in the intertidal zone produced less biomass than those from populations lower in the intertidal zone, consistent with prior research (Nielsen et al. 2006). In addition, variation in annual environmental conditions impacted the size of individual plants at the end of annual growth season (August). Specifically the average Additionally, there was some evidence that frond trimming as currently practiced by commercial harvesters, also reduces the size of plants  
+
+
+Individual populations were monitoring at four different sites in Sonoma and Marin counties in California for three years. Populations were selected based on ability to safely access them and make measurements. As a consequence, the most wave exposed populations, and those lowest in the intertidal zone, were not well represented in this study. We also did not target populations distributed at the upper most fringe of the species intertidal distribution. WIthin each site, populations were randomly assigned as either controls or to have their fronds trimmed in each of three years (2007, 2008, 2009). Ten visually representative plants from each population were haphazardly selected and their stipe diameters were measured at the base of the stipe immediately above the haptera of the holdfast. Tidal height of each population was measured using a stadia rod and level scope with refernce to a local still water level and at a known time and scaled using local tidal height predictions. 
+
+### Linear mixed model analysis
+The trimming treatment, tidal height and year were modeled as fixed factors and site was modeled as a random factor. We checked model fit by visual inspection of residual plots and used interaction terms to assess model fit.    
+
+
+```{r trim-d-table, fig.width = 6,  fig.height = 6, message=FALSE, include =TRUE}
+
+# bm_tab <- tbl_regression(bm_model)
+# 
+# bm_tab %>%
+#   add_global_p()%>% 
+#   bold_labels() %>% 
+#   italicize_levels()%>%
+#   as_flex_table()
+
+tab_model(bm_model)
 
 ```
-```{r trim-d-table, fig.width = 6,  fig.height = 6, message=FALSE, Include =TRUE}
+Predicted effects and 95% CI bands of tidal height, year, and frond harvesting on **Postelsia palmaeformis** stipe diameter, a proxy for individual biomass.  
 
-bm_tab <- tbl_regression(bm_model)
-
-bm_tab %>%
-  add_global_p()%>% 
-  bold_labels() %>% 
-  italicize_levels()%>%
-  as_flex_table()
-
-
-```
-```{r plot-bm_model-fit, fig.width = 10,  fig.height = 4, }
+```{r plot-bm_model-fit, fig.width = 10,  fig.height = 4, include=T }
 bm_model_fit_yr <- ggpredict(bm_model, terms = c("th", "yr_f"))
 bm_model_fit_trim <- ggpredict(bm_model, terms = c("th", "trim_all"))
 
 bm_plot_1 <-  plot(bm_model_fit_yr) +
   theme_few()+
-  labs(x="tideal height (ft) MLLW")+
+  labs(x="tidal height (ft) MLLW")+
   labs(y = "diameter (mm)")+
   labs(colour="year")+
   labs(title = "Modeled stipe diameter in August")
 
 bm_plot_2 <- plot(bm_model_fit_trim) +
    theme_few()+
-  labs(x="tideal height (ft) MLLW")+
+  labs(x="tidal height (ft) MLLW")+
   labs(y = "diameter (mm)")+
   labs(colour="trim")+
   labs(title = "Modeled stipe diameter in August")
@@ -262,7 +356,7 @@ bm_plot_1 + bm_plot_2
 ```
 
 
-```{r trim-h, fig.width = 6,  fig.height = 6}
+```{r trim-h, fig.width = 6,  fig.height = 6, include =T}
 h_model <- lmer(augH ~ trim_all + yr_f + th + (1|site_code), data = post_pop)
 summary(h_model)
 plot(h_model)
@@ -274,7 +368,7 @@ confint(h_model)
 ```
 
 
-```{r trim-h-table, fig.width = 6,  fig.height = 6, message = FALSE }
+```{r trim-h-table, fig.width = 6,  fig.height = 6, message = FALSE, Include=T }
 h_tab <- tbl_regression(h_model)
 
 h_tab %>%
@@ -285,7 +379,9 @@ h_tab %>%
 
 ```
 
-```{r plot-h-model-fit, fig.width = 8,  fig.height = 4 }
+
+
+```{r plot-h-model-fit, fig.width = 8,  fig.height = 4, Include=T }
 # h_model_fit <- ggpredict(h_model, terms = c("yr_f", "trim_all"))
 # 
 #  plot(h_model_fit) +
@@ -301,13 +397,13 @@ h_model_fit_trim <- ggpredict(h_model, terms = c("trim_all"))
 h_plot_1 <-  plot(h_model_fit_yr) +
   theme_few()+
   labs(x="year")+
-  labs(y = "height (cm)")+
+  labs(y = "height (cm) +/- 95% CI")+
   labs(colour="trim")+
   labs(title = NULL)
  
  h_plot_2 <- plot(h_model_fit_trim) +
   theme_few()+
-  labs(x="trim")+
+  labs(x="control = 0, trimmed = 1")+
   labs(y = NULL)+
   labs(colour="trim")+
   labs(title = NULL)
@@ -327,7 +423,7 @@ h_plot_1 <-  plot(h_model_fit_yr) +
 
 
 
-```{r trim-pr, fig.width = 6,  fig.height = 6}
+```{r trim-pr, fig.width = 6,  fig.height = 6, include =T}
 
 pr_model <- glmer(augPR ~ trim_all + yr_f + th + (1|site_code), data = post_pop, family=binomial)
 summary(pr_model)
@@ -352,22 +448,22 @@ pr_tab %>%
 
 
 
-```{r plot-pr-model-fit, fig.width = 8,  fig.height = 4, include=TREU }
+```{r plot-pr-model-fit, fig.width = 8,  fig.height = 4, include=T}
 pr_model_fit_yr <- ggpredict(pr_model, terms = c("yr_f"))
 pr_model_fit_trim <- ggpredict(pr_model, terms = c("trim_all"))
 
 pr_plot_1 <-  plot(pr_model_fit_yr) +
   theme_few()+
   labs(x="year")+
-  labs(y = "percentage of population reproductive")+
+  labs(y = "reproductive thalli (+/- 95% CI")+
   labs(colour="trim")+
   labs(title = NULL)
  
  pr_plot_2 <- plot(pr_model_fit_trim) +
   theme_few()+
-  labs(x="trim")+
+  labs(x="control = 0, trimmed = 1")+
   labs(y = NULL)+
-  labs(colour="trim")+
+  labs(colour="triml")+
   labs(title = NULL)
  
  pr_plot_1 + pr_plot_2
@@ -383,16 +479,14 @@ pr_plot_1 <-  plot(pr_model_fit_yr) +
 ```
 
 
-```{r pop, fig.width = 6,  fig.height = 6}
+```{r pop, fig.width = 6,  fig.height = 6, include =T}
 
-pop_model <- lmer(jun ~ augLag + trim_all * yr_f + th + (1|site_code), data = post_pop)
+pop_model <- lmer(jun ~ augLag + trim_all * yr_f + (1|site_code), data = post_pop)
 summary(pop_model)
 plot(pop_model)
 ranef(pop_model)
 coef(pop_model)
 anova(pop_model)
-
-
 
 ```
 
@@ -408,7 +502,7 @@ pop_tab %>%
 
 
 ```
-```{r pop-plot, message = FALSE, Include = TRUE, fig.width = 8,  fig.height = 4}
+```{r pop-plot, message = FALSE, Include = TRUE, fig.width = 8,  fig.height = 4, Include=T}
 
 pop_model_fit <- ggpredict(pop_model, terms = c("augLag", "trim_all", "yr_f"))
 
@@ -427,6 +521,40 @@ plot(pop_model_fit)+
 #   labs(x="August population size (prior year)")+
 #   labs(y = "June population size")+
 #   labs (colour = "trim")
+
+```
+
+
+```{r lolliplots, fig.width = 3,  fig.height = 8, Include=T }
+
+# cbbindex %>%
+#   ggplot(aes(x=cuti,y=month)) +
+#   geom_point(size = 3, colour = "black") + 
+#   geom_segment( aes(x=0, xend=cuti, y=month, yend=month))+
+#   labs(y= "month", x="cuti") +
+#   facet_wrap(~year, ncol=3)
+
+
+p1 <- cbbindex %>%
+ggplot(aes(x=month,y=beuti)) +
+geom_bar(aes(x=month, y=beuti), stat="identity", fill="skyblue", alpha=0.7) +
+ facet_wrap(~year, ncol=1)+
+  #coord_flip()+
+  theme_minimal()+
+  labs(x="month")+
+ theme(axis.text.x = element_text(angle = 90, vjust= 0.4))
+
+p1
+
+# p2 <- cbbindex %>%
+# ggplot(aes(x=r_month,y=cuti)) +
+# geom_bar( aes(x=r_month, y=cuti), stat="identity", fill="skyblue3", alpha=0.7) +
+#  facet_wrap(~year, ncol=3)+
+#   coord_flip()+
+#   theme_minimal()+
+#    labs(x="month")
+# 
+# p1+p2
 
 ```
 
