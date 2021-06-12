@@ -552,7 +552,7 @@ pr_plot_1 <-  plot(pr_model_fit_yr) +
 
 ```
 
-### Interannual variation in monhtly nitrogen availablity from coastal upwelling
+### Interannual variation in monthly nitrogen availablity from coastal upwelling
 
 One possible contributing factor to these variations among years is the availability of nitrogen delivered through coastal upwelling. The annual frequency, duration, and seasonal timing of coastal upwelling, which delivers cold, nutrient-rich waters to coastal ecosystems, are important drivers of marine primary productivity in northern Calfiornia ecosystems. In 2009 nitrogen supply as indexed by BEUTI (Biologically Effective Upwelling Transport Index) [(Jacox et al. 2018)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JC014187) was reduced during June and July compared to 2007 and 2008. Additional explanatory information on the BEUTI index is available [here](https://mjacox.com/upwelling-indices/).  
 
@@ -590,7 +590,7 @@ p1
 # p1+p2
 
 ```
-### Previous published results on the impact of frond harvesting on frond growth and reprductive output
+### Previously published results on the impact of frond harvesting on frond growth and reprductive output
 
 Previously published results (Thompson et al., 2010) found that the area of fronds are smaller and reproductive output is lower overall in the southernmost site they studied (Piedras Blancas). The fronds of unharvested *Postelsia* were largest between June and July, and reached their maximum size at the southernmost site about a month earlier. Piedras Blancas was near the biogeographic range limit for the species at the time of the study and differences in environmental conditions between the regions may be contributing to these differences in ecological performance.  
 
