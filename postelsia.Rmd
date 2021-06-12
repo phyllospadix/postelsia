@@ -369,7 +369,7 @@ Those that had their fronds harvested had less biomass in August, but the statis
 
 ### Biomass
 
-#### Mixed model analysis of *Postelsia* stipe diameter, a proxy for individual biomass.  
+#### **Mixed model analysis of *Postelsia* stipe diameter, a proxy for individual biomass.**  
 
 ```{r trim-d-table, fig.width = 6,  fig.height = 6, message=FALSE, include =TRUE}
 
@@ -386,7 +386,7 @@ tab_model(bm_model)
 ```
 
 
-#### Mixed model effects and 95% confidence bands from the analysis of *Postelsia* stipe diameter.
+#### **Mixed model effects and 95% confidence bands from the analysis of *Postelsia* stipe diameter.**
 
 ```{r plot-bm_model-fit, fig.width = 10,  fig.height = 4, include=T }
 bm_model_fit_yr <- ggpredict(bm_model, terms = c("th", "yr_f"))
@@ -420,7 +420,7 @@ bm_plot_1 + bm_plot_2
 
 ### Height
 
-#### Mixed model analysis of *Postelsia* stipe height.  
+#### **Mixed model analysis of *Postelsia* stipe height.**  
 
 ```{r trim-h, fig.width = 6,  fig.height = 6, include =F}
 h_model <- lmer(augH ~ trim_all + yr_f + th + (1|site_code), data = post_pop)
@@ -446,7 +446,7 @@ tab_model(h_model)
 ```
 
 
-#### Mixed model effects and 95% confidence bands from the analysis of *Postelsia* stipe height.
+#### **Mixed model effects and 95% confidence bands from the analysis of *Postelsia* stipe height.**
 
 ```{r plot-h-model-fit, fig.width = 8,  fig.height = 4, Include=T }
 # h_model_fit <- ggpredict(h_model, terms = c("yr_f", "trim_all"))
@@ -491,7 +491,7 @@ h_plot_1 <-  plot(h_model_fit_yr) +
 
 ### Reproductive status
 
-#### Mixed model analysis of *Postelsia* reprodctive status.
+#### **Mixed model analysis of *Postelsia* reprodctive status.**
 
 
 ```{r trim-pr, fig.width = 6,  fig.height = 6, include =F}
@@ -520,7 +520,7 @@ tab_model(pr_model)
 ```
 
 
-#### Mixed model effects and 95% confidence bands from the analysis of *Postelsia* sreproductive status.
+#### **Mixed model effects and 95% confidence bands from the analysis of *Postelsia* sreproductive status.**
 
 ```{r plot-pr-model-fit, fig.width = 8,  fig.height = 4, include=T}
 pr_model_fit_yr <- ggpredict(pr_model, terms = c("yr_f"))
@@ -556,7 +556,7 @@ pr_plot_1 <-  plot(pr_model_fit_yr) +
 
 One possible contributing factor to these variations among years is the availability of nitrogen delivered through coastal upwelling. The annual frequency, duration, and seasonal timing of coastal upwelling, which delivers cold, nutrient-rich waters to coastal ecosystems, are important drivers of marine primary productivity in northern Calfiornia ecosystems. In 2009 nitrogen supply as indexed by BEUTI (Biologically Effective Upwelling Transport Index) [(Jacox et al. 2018)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JC014187) was reduced during June and July compared to 2007 and 2008. Additional explanatory information on the BEUTI index is available [here](https://mjacox.com/upwelling-indices/).  
 
-#### Biologically Effective Upwelling Transport Index (BEUTI) from 2007-2009
+#### **Biologically Effective Upwelling Transport Index (BEUTI) from 2007-2009.**
 
 ```{r barplots, fig.width = 3,  fig.height = 8, Include=T }
 
@@ -616,7 +616,7 @@ A precautionary approach to the stewardship of *Postelsia palmaeformis* is warra
 
 Individual populations were monitoring at four different sites in Sonoma and Marin counties in California for three years. Populations were selected based on ability to safely access them and make measurements. As a consequence, the most wave exposed populations, and those lowest in the intertidal zone, were not well represented in this study. We also did not target populations distributed at the upper most fringe of the species intertidal distribution. WIthin each site, populations were randomly assigned as either controls or to have their fronds trimmed in each of three years (2007, 2008, 2009). Ten visually representative plants from each population were haphazardly selected and their stipe diameters were measured at the base of the stipe immediately above the haptera of the holdfast. Tidal height of each population was measured using a stadia rod and level scope with reference to a local still water level and at a known time and scaled using local tidal height predictions.   
 
-#### Data analysis 
+#### **Data analysis** 
 We modeled juvenile recruitment (June population size) as a function of year, to represent inter annual variation in environmental conditions, the adult population size in August of the prior year, and the harvest trimming treatment, all as fixed factors. We included site as a random factor to account for the randomization of trimming treatments within sites and the known metapopulation dynamics of populations within a local site. We did not include tidal height as a factor as it is inherently represented by the August population size. To assess plant metrics within populations (stipe diameter and height, and proportion of plants that were reproductive with visible sori) we modeled the harvest trimming treatment, tidal height, and year as fixed factors and site as a random factor. We checked model fit by visual inspection of residual plots. Interaction terms were initially included, but were dropped as they did not improve model fit and our questions of interest involved the main effects.     
 
 
