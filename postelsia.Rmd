@@ -628,7 +628,7 @@ Individual populations were monitoring at four different sites in Sonoma and Mar
 We modeled juvenile recruitment (June population size) as a function of year, to represent inter annual variation in environmental conditions, the adult population size in August of the prior year, and the harvest trimming treatment, all as fixed factors. We included site as a random factor to account for the randomization of trimming treatments within sites and the known metapopulation dynamics of populations within a local site. We did not include tidal height as a factor as it is inherently represented by the August population size. To assess plant metrics within populations (stipe diameter and height, and proportion of plants that were reproductive with visible sori) we modeled the harvest trimming treatment, tidal height, and year as fixed factors and site as a random factor. We checked model fit by visual inspection of residual plots. Interaction terms were initially included, but were dropped as they did not improve model fit and our questions of interest involved the main effects.     
 
 
-### References and Resources about *Postelsia palmaeformis*
+### References
 
 Please see this public [zotero library](https://www.zotero.org/groups/4289135/postelsia_palmaeformis/library).  
 
