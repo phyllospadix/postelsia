@@ -201,7 +201,7 @@ This summary is presented as an open science project to document data analysis a
 
 ## Biology and ecology
 
-The [sea palm *Postelsia palmaeformis*](https://marine.ucsc.edu/target/target-species-postelsia.html) is an intertidal kelp (a brown macroalga in the Order Laminariales). It is only found on the west coast of North America. It grows a robust holdfast made up of haptera to attach to the rocks or mussels or barnacles where it settles. It has a hollow tubular stem-like stipe topped with a mop-like profusion of ridged blades (or fronds). https://marine.ucsc.edu/target/target-species-postelsia.html
+The [sea palm *Postelsia palmaeformis*](https://marine.ucsc.edu/target/target-species-postelsia.html) is an intertidal kelp (a brown macroalga in the Order Laminariales). It is only found on the west coast of North America. It grows a robust holdfast made up of haptera to attach to the rocks or mussels or barnacles where it settles. It has a hollow tubular stem-like stipe topped with a mop-like profusion of ridged blades (or fronds).   
 
 ![**Anatomy of *Postelsia* (illustration by Sarah Oehm)**](https://web.archive.org/web/20071006173831im_/http://www.mbari.org/staff/conn/botany/browns/saraho/morphp.jpg)  
 
@@ -662,9 +662,9 @@ Individual populations were monitoring at four different sites in Sonoma and Mar
 We modeled juvenile recruitment (June population size) as a function of year, to represent inter annual variation in environmental conditions, the adult population size in August of the prior year, and the harvest trimming treatment, all as fixed factors. We included site as a random factor to account for the randomization of trimming treatments within sites and the known metapopulation dynamics of populations within a local site. We did not include tidal height as a factor as it is inherently represented by the August population size. To assess plant metrics within populations (stipe diameter and height, and proportion of plants that were reproductive with visible sori) we modeled the harvest trimming treatment, tidal height, and year as fixed factors and site as a random factor. We checked model fit by visual inspection of residual plots. Interaction terms were initially included, but were dropped as they did not improve model fit and our questions of interest involved the main effects.     
 
 
-### References
+### References  
 
-Please see this public [zotero library](https://www.zotero.org/groups/4289135/postelsia_palmaeformis/library).  
+Please see this [zotero library](https://www.zotero.org/groups/4289135/postelsia_palmaeformis/library).  
 
 
 
