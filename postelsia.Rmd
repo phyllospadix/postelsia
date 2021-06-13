@@ -193,7 +193,7 @@ summary(ddwmodel)
 ## Introduction
 This document presents a summary of published research on the ecology of intertidal sea palm kelp *Postelsia palmaeformis* (hereafter *Postelsia*) together with new analyses of unpublished data collected by [Sarah Ann Thompson](http://www.faralloninstitute.org/sarah-ann), Heather Knoll, [Carol Blanchette](https://vesr.nrs.ucsb.edu/about/people/dr-carol-blanchette), and [Karina Nielsen](https://karinanielsen.io/) as part of a [CA Sea Grant funded research project](https://caseagrant.ucsd.edu/sites/default/files/RCZ-200-Nielsen.pdf) to KN and CB. The focus of that project was to examine the effects of artisanal commercial harvesting in California on *Postelsia*.
 
-The California Fish and Game Commission is receiving requests to limit commercial seaweed harvesting in response to the collapse of *Nereocystis leutkeana* bull kelp forests [(McPherson et al. 2021)](https://www.nature.com/articles/s42003-021-01827-6) and concerns that there may be a concurrent decline of *Postelsia* populations in some locations. In addition a [proposal](https://static1.squarespace.com/static/5db26a9129f30174496b208b/t/608106c52665aa1e0bb1ab43/1619068616608/DRAFT+Tribal+Proposal+for+Amending+Commercial+Kelp+%26+Seaweed+Rules-Updated+4.21.2021-PDF.pdf) developed by the [Intertibal Sinkyone Wilderness Council](https://sinkyone.org/) for a moratorium on commercial harvesting of these two species has also been submitted for consideration. 
+The California Fish and Game Commission is receiving requests to limit commercial seaweed harvesting in response to the collapse of *Nereocystis leutkeana* bull kelp forests [(McPherson et al. 2021)](https://www.nature.com/articles/s42003-021-01827-6) and concerns that there may be a concurrent decline of *Postelsia* populations in some locations. In addition a [proposal](https://static1.squarespace.com/static/5db26a9129f30174496b208b/t/608106c52665aa1e0bb1ab43/1619068616608/DRAFT+Tribal+Proposal+for+Amending+Commercial+Kelp+%26+Seaweed+Rules-Updated+4.21.2021-PDF.pdf) developed by the [Intertribal Sinkyone Wilderness Council](https://sinkyone.org/) for a moratorium on commercial harvesting of these two species has also been submitted for consideration. 
 
 This summary is presented as an open science project to support stewardship decisions and provide stakeholders with available scientific information on *Postelsia*. The data and code used to create this document and conduct analyses of unpublished data are available in [this public repository](https://github.com/phyllospadix/postelsia). The new analyses of unpublished data presented here have not been peer-reviewed.        
 
@@ -235,11 +235,11 @@ In California, [recreational harvest](https://wildlife.ca.gov/Conservation/Marin
 
 ## The effect of frond harvesting on juvenile recruitment 
 
-In 2010 Thompson et al. reported on two experiments done to evaluate the ecological consequences of commercial frond harvesting on **Postelsia**. Commercial harvesters use a frond trimming method they claim is sustainable because the fronds regrow and allows multiple harvests per year. The research team from Thompson et al. wondered if repeated harvests might reduce reproductive output and possibly reduce juvenile recruitment (population size in June) in the following year.   
+In 2010 Thompson et al. reported on two experiments done to evaluate the ecological consequences of commercial frond harvesting on *Postelsia*. Commercial harvesters use a frond trimming method they claim is sustainable because the fronds regrow and allows multiple harvests per year. The research team from Thompson et al. wondered if repeated harvests might reduce reproductive output and possibly reduce juvenile recruitment (population size in June) in the following year.   
 
 They did two studies to assess the effects of frond harvesting on *Postelsia*. First they examining how frond regrowth and reproductive output at two sites, one in central and one in northern California, were impacted by frond harvesting at different times and different frequencies over the spring and summer growth season. In a second experiment they tracked 32 *Postelsia* populations across four sites in northern California to see if frond harvesting would reduce juvenile recruitment in the following year. They repeated the harvest treatments and tracked the populations for three years. They also measured the sizes of individual thalli or "plants", determined the proportion of plants that were reproductive within each population, as well as the tidal elevation of each population.  
 
-Here we extend the analyses from the first two years (2007-2008) of these experiments, previously published by Thompson et al. (2010), with new analyses and incorporating data collected in a subsequent year.    
+Here we extend the analyses from the first two years (2007-2008) of these experiments, previously published by Thompson et al. (2010), with new analyses and incorporating data collected in a subsequent year(table in 4.1, figure in 4.2).    
 
 >The size of *Postelsia* populations in August are a strong predictor of juvenile recruitment to the same locations the following year. Frond harvesting, whether done once in the spring or twice over the spring and summer reduced the size of populations between 2007 and 2008, but not between 2008 and 2009. In 2008 recruitment was 38% greater in populations not subjected to trimming and population sizes were reduced by 40-50% when trimmed. Juvenile recruitment (population sizes) were smaller overall in June 2009 relative to June 2008.   
 
@@ -306,7 +306,7 @@ plot(pop_model_fit)+
 
 ## Reduction of *Postelsia* population sizes between June and August 
 
->The size of *Postelsia* populations consistently declined over the summer months of three years (2007, 2008, 2009) by about 50% with no difference among years or with respect to frond harvesting.   
+>The size of *Postelsia* populations consistently declined over the summer months of three years (2007, 2008, 2009) by about 50% with no difference among years or with respect to frond harvesting. In the figure below if a population of *Postelsia* was 1000 plants in June, it had only 573 plants in August (1000 x 0.53 + 43 = 573). 
 
 This is likely a natural thinning process driven by the dislodgement of larger or poorly-attached thalli ("plants") by waves. Crowding and resulting etiolated growth or intraspecific competition for light may also contribute. These dislodged plants fuel wrack-based food webs on sandy beaches, may help colonize other locations by transporting reproductive individuals to new locations, or may even be transported to deeper waters, contributing to carbon sequestration (Krause-Jensen & Duarte 2016, Ortega et al. 2019). By August, most populations are reproductive and will likely contribute to the next generation.   
 
@@ -355,7 +355,7 @@ We suspect that variation in environmental conditions between years affects whet
 
 The diameter of the stipe at the base of an individual *Postelsia* thallus or "plant" is an excellent predictor of the dry weight or biomass of the plant. Measurements of stipe diameter in the field are a convenient and non-destructive way to estimate *Postelsia* growth or production without sacrificing plants. We collected 22 plants to assess the relationship between biomass.  
 
-### Relationship between *Postelsia* biomass and the diamater of the base of the stipe.(dry weight (g)) and stipe diameter  
+### Relationship between *Postelsia* biomass and the diamater of the base of the stipe 
 
 ```{r trim-d, include =F}
 
@@ -520,7 +520,7 @@ h_plot_1 <-  plot(h_model_fit_yr) +
 \newpage
 ### Reproductive status
 
-#### **Mixed model analysis of *Postelsia* reprodctive status**
+#### **Mixed model analysis of *Postelsia* reproductive status**
 
 
 ```{r trim-pr, fig.width = 6,  fig.height = 6, include =F}
@@ -588,7 +588,7 @@ One possible contributing factor to these variations among years is the availabi
 
 In 2009 nitrogen supply as indexed by BEUTI (Biologically Effective Upwelling Transport Index) [(Jacox et al. 2018)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JC014187) was reduced during June and July compared to 2007 and 2008. This may have had a negative influence on growth and production of *Postelsia* in 2009. Additional explanatory information on the BEUTI index is available [here](https://mjacox.com/upwelling-indices/).  
 
-Warmer waters such as during recent marine heat waves [(McPherson et al. 2021)](https://www.nature.com/articles/s42003-021-01827-6) may also have a negative impact on *Postelia*. A study of temperature tolerances of seaweeds (Lüning & Freshwater 1988) determined that *Postelsia* do not survive in waters above 15 °C. Sub-lethal effects of warmer waters may occur at somewhat lower temperatures.  
+Warmer waters such as during recent marine heat waves [(McPherson et al. 2021)](https://www.nature.com/articles/s42003-021-01827-6) may also have a negative impact on *Postelsia*. A study of temperature tolerances of seaweeds (Lüning & Freshwater 1988) determined that *Postelsia* do not survive in waters above 15 °C. Sub-lethal effects of warmer waters may occur at somewhat lower temperatures.  
 
 
 
@@ -658,7 +658,7 @@ This has serious implications for the recovery of populations that have gone loc
 
 ### Methods summary for the unpublished data and new analyses presented in this document
 
-Individual populations were monitoring at four different sites in Sonoma and Marin counties in California for three years. Populations were selected based on ability to safely access them and make measurements. As a consequence, the most wave exposed populations, and those lowest in the intertidal zone, were not well represented in this study. We also did not target populations distributed at the upper most fringe of the species intertidal distribution. WIthin each site, populations were randomly assigned as either controls or to have their fronds trimmed in each of three years (2007, 2008, 2009). Ten visually representative plants from each population were haphazardly selected and their stipe diameters were measured at the base of the stipe immediately above the haptera of the holdfast. Tidal height of each population was measured using a stadia rod and level scope with reference to a local still water level at a known time and scaled using local tidal height predictions.   
+Individual populations were monitored at four different sites in Sonoma and Marin counties in California for three years. Populations were selected based on ability to safely access them and make measurements. As a consequence, the most wave exposed populations, and those lowest in the intertidal zone, were not well represented in this study. We also did not target populations distributed at the upper most fringe of the species intertidal distribution. WIthin each site, populations were randomly assigned as either controls or to have their fronds trimmed in each of three years (2007, 2008, 2009). Ten visually representative plants from each population were haphazardly selected and their stipe diameters were measured at the base of the stipe immediately above the haptera of the holdfast. Tidal height of each population was measured using a stadia rod and level scope with reference to a local still water level at a known time and scaled using local tidal height predictions.   
 
 #### **Data analysis** 
 We modeled juvenile recruitment (June population size) as a function of year, to represent inter annual variation in environmental conditions, the adult population size in August of the prior year, and the harvest trimming treatment, all as fixed factors. We included site as a random factor to account for the randomization of trimming treatments within sites and the known metapopulation dynamics of populations within a local site. We did not include tidal height as a factor as it is inherently represented by the August population size. To assess plant metrics within populations (stipe diameter and height, and proportion of plants that were reproductive with visible sori) we modeled the harvest trimming treatment, tidal height, and year as fixed factors and site as a random factor. We checked model fit by visual inspection of residual plots. Interaction terms were initially included, but were dropped as they did not improve model fit and our questions of interest involved the main effects.     
