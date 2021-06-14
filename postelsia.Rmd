@@ -132,9 +132,10 @@ mutate(cbbindex, r_month = factor(cbbindex$month, levels=c("dec",
 # Introduction
 This document presents a summary of published research on the ecology of intertidal sea palm kelp *Postelsia palmaeformis* (hereafter *Postelsia*) together with new analyses of unpublished data collected by [Sarah Ann Thompson](http://www.faralloninstitute.org/sarah-ann), Heather Knoll, [Carol Blanchette](https://vesr.nrs.ucsb.edu/about/people/dr-carol-blanchette), and [Karina Nielsen](https://karinanielsen.io/) as part of a [CA Sea Grant funded research project](https://caseagrant.ucsd.edu/sites/default/files/RCZ-200-Nielsen.pdf) to KN and CB. The focus of that project was to examine the effects of artisanal commercial harvesting in California on *Postelsia*.
 
-The California Fish and Game Commission is receiving requests to limit commercial seaweed harvesting in response to the collapse of *Nereocystis leutkeana* bull kelp forests [(McPherson et al. 2021)](https://www.nature.com/articles/s42003-021-01827-6) and concerns that there may be a concurrent decline of *Postelsia* populations in some locations. In addition a [proposal](https://static1.squarespace.com/static/5db26a9129f30174496b208b/t/608106c52665aa1e0bb1ab43/1619068616608/DRAFT+Tribal+Proposal+for+Amending+Commercial+Kelp+%26+Seaweed+Rules-Updated+4.21.2021-PDF.pdf) developed by the [Intertribal Sinkyone Wilderness Council](https://sinkyone.org/) for a moratorium on commercial harvesting of these two species has also been submitted for consideration. 
+The California Fish and Game Commission is receiving requests to limit commercial seaweed harvesting in response to the collapse of *Nereocystis leutkeana* bull kelp forests [(McPherson et al. 2021)](https://www.nature.com/articles/s42003-021-01827-6) and concerns that there may be a concurrent decline of *Postelsia* populations in some locations. In addition a [proposal](https://static1.squarespace.com/static/5db26a9129f30174496b208b/t/608106c52665aa1e0bb1ab43/1619068616608/DRAFT+Tribal+Proposal+for+Amending+Commercial+Kelp+%26+Seaweed+Rules-Updated+4.21.2021-PDF.pdf) developed by the [Intertribal Sinkyone Wilderness Council](https://sinkyone.org/) for a moratorium on commercial harvesting of these two species has also been submitted for consideration.   
+This summary is presented as an open science project to support stewardship decisions and provide stakeholders with available scientific information on *Postelsia*. The data and code used to create this document and conduct analyses of unpublished data are available in [this public repository](https://github.com/phyllospadix/postelsia). The new analyses of unpublished data presented here have not been peer-reviewed. 
 
-This summary is presented as an open science project to support stewardship decisions and provide stakeholders with available scientific information on *Postelsia*. The data and code used to create this document and conduct analyses of unpublished data are available in [this public repository](https://github.com/phyllospadix/postelsia). The new analyses of unpublished data presented here have not been peer-reviewed.        
+> The bottom line: a precautionary approach to the stewardship of *Postelsia palmaeformis* is warranted.  
 
 \newpage
 # Biology and ecology
@@ -192,9 +193,7 @@ They did two studies to assess the effects of frond harvesting on *Postelsia*. F
 
 Here we extend the analyses from the first two years (2007-2008) of these experiments, previously published by Thompson et al. (2010), with new analyses and incorporating data collected in a subsequent year.    
 
-
 \newpage
-
 
 ```{r pop, fig.width = 6,  fig.height = 6, include =FALSE}
 
@@ -222,7 +221,20 @@ Table 4.1. Linear mixed model of *Postelsia* recruitment.
 #   italicize_levels()%>%
 #   as_flex_table()
 
-tab_model(pop_model)
+tab_model(pop_model, 
+pred.labels = c(
+    "Intercept",
+    "Adult pop. sz. prior yr.",
+    "Harvested",
+    "2009",
+    "Harvested x 2009"
+    
+  ),
+  dv.labels = c("Juvenile Recruitment"),
+  string.ci = "Conf. Int (95%)",
+  string.p = "P-Value"
+)          
+
 
 ```
 The response variable is the abundance of juvenile *Postelsia* plants in June for each population in the study. The explanatory variables are the abundance of adult parent plants in the prior August (augLag), and indicator variable for the frond harvest treatment (trim_all, where 1 = fronds were harvested, 0 = fronds were left intact), the year (yr_f, where year was either 2008 or 2009), and an interaction term between frond harvesting and year (trim_all[1]*yr_f[[2009]). The interaction term assesses if there was a different response to the frond harvesting treatment in 2009 compared to 2008. Sites were included as a random factor to account for the stratified randomization of trimming treatments within sites and to account for any differences in metapopulation structure or dynamics among the sites.     
@@ -327,6 +339,7 @@ diam_dw +
   labs(subtitle = "dry weight = 2.19 + (stipe diam.)^2.7, R2 = 0.99")
 
 ```
+
 ```{r trim-d, include =F}
 
 bm_model <- lmer(augD ~ trim_all + yr_f + th +(1|site_code), data = post_pop)
@@ -340,16 +353,15 @@ confint(bm_model)
 ```
 
 
-
 >Using stipe diameter as a proxy for biomass, we found that plants from populations higher in the intertidal zone produced less biomass than those lower in the intertidal zone (Figure \@ref(fig:plot-bm-model-fit, Table 6.1), consistent with prior research (Nielsen et al. 2006). 
 
 This is most likely due to longer emersion times in the upper intertidal zone that reduce access to nutrients in the water, exposes the plants to atmospheric conditions for longer periods of time, resulting in additional desiccation and heat stress. *Postelsia* growing higher on the shore have lower nitrogen content and higher C:N ratios than those lower in the shore (Nielsen et al. 2006).  
 
 >In addition, variation in annual conditions affected stipe diameter, the height of plants, and their reproductive status at the end of the annual growth season. Plants in 2009 produced less biomass, were shorter, and had a smaller proportion of individuals with visible sori (where spores are formed) (Figures \@ref(fig:plot-bm-model-fit), \@ref(fig:plot-h-model-fit), and \@ref(fig:plot-pr-model-fit)).  
 
->Those that had their fronds harvested had less biomass in August, but the statistical evidence for this was moderate (Figure \@ref(fig:pop-plot), Table 6.1). They were also shorter and had a smaller proportion of individuals with visible sori (Figures \@ref(fig:h-plot) and \@ref(fig:pr-plot)). Over the range of tidal heights examined in this study, we did not see variation in plant height or reproductive status with tidal height (Tables 6.2 and 6.3). However, this study was not set up to examine tidal height variation per se, so this is not an unexpected result for these metrics.  
+>Those that had their fronds harvested had less biomass in August, but the statistical evidence for this was moderate (Figure \@ref(fig:pop-plot), Table 6.1). They were also shorter and had a smaller proportion of individuals with visible sori (Figures \@ref(fig:plot-h-model-fit) and \@ref(fig:plot-pr-model-fit)). Over the range of tidal heights examined in this study, we did not see variation in plant height or reproductive status with tidal height (Tables 6.2 and 6.3). However, this study was not set up to examine tidal height variation per se, so this is not an unexpected result for these metrics.  
 
-
+\newpage
 
 Table 6.1. Linear mixed model of *Postelsia* stipe diameter, a proxy for biomass. 
 ```{r trim-d-table, fig.width = 6,  fig.height = 6, message=FALSE, include =TRUE}
@@ -362,7 +374,19 @@ Table 6.1. Linear mixed model of *Postelsia* stipe diameter, a proxy for biomass
 #   italicize_levels()%>%
 #   as_flex_table()
 
-tab_model(bm_model)
+tab_model(bm_model,
+pred.labels = c(
+    "Intercept",
+    "Harvested",
+    "2008",
+    "2009",
+    "Tidal height"
+    
+  ),
+  dv.labels = c("Stipe diameter"),
+  string.ci = "Conf. Int (95%)",
+  string.p = "p-Value"
+)
 
 ```
 The response variable is the stipe diameter of adult *Postelsia* plants in August, the end of the growth season. The explanatory variables are tidal height of the population (th), and indicator variable for the frond harvest treatment (trim_all, where 1 = fronds were harvested, 0 = fronds were left intact), the year (yr_f, where year is 2007, 2008 or 2009). Sites were included as a random factor to account for the stratified randomization of trimming treatments within sites and to account for any differences in environmental conditions among sites that might affect individual performance. 
@@ -422,7 +446,20 @@ Table 6.2. Linear mixed model of *Postelsia* size (height).
 #   italicize_levels()%>%
 #   as_flex_table()
 
-tab_model(h_model)
+tab_model(
+  h_model,
+  pred.labels = c(
+    "Intercept",
+    "Harvested",
+    "2008",
+    "2009",
+    "Tidal height"
+    
+  ),
+  dv.labels = c("Stipe height"),
+  string.ci = "Conf. Int (95%)",
+  string.p = "p-Value"
+)
 
 ```
 The response variable is the stipe height of adult *Postelsia* plants in August, the end of the growth season. The explanatory variables are as in Table. 6.1.  
@@ -494,7 +531,19 @@ Table 6.3. Linear mixed model of *Postelsia* reproductive status.
 #   italicize_levels()%>%
 #   as_flex_table()
 
-tab_model(pr_model)
+tab_model(pr_model,
+pred.labels = c(
+    "Intercept",
+    "Harvested",
+    "2008",
+    "2009",
+    "Tidal height"
+    
+  ),
+  dv.labels = c("Proportion reproductive"),
+  string.ci = "Conf. Int (95%)",
+  string.p = "p-Value"
+)
 
 ```
 The response variable is the proportion of adult *Postelsia* plants that had visible sori in August. The explanatory variables are as in Table. 6.1.    
@@ -529,6 +578,8 @@ pr_plot_1 <-  plot(pr_model_fit_yr) +
 #   labs (colour = "trim")
 
 ```
+\newpage
+
 # Impact of frond harvesting on frond growth and reproductive output  
 
 Previously published results (Thompson et al., 2010) found that the area of fronds are smaller and reproductive output is lower overall in the southernmost site they studied (Piedras Blancas). The fronds of unharvested *Postelsia* were largest between June and July, and reached their maximum size at the southernmost site about a month earlier. Piedras Blancas was near the biogeographic range limit for the species at the time of the study and differences in environmental conditions between the regions may be contributing to these differences in ecological performance.  
@@ -538,6 +589,7 @@ Frond harvesting reduced frond area overall at the end of the growth season, reg
 Reproductive output of viable spores for most individuals did not begin until late July at both sites, just after the fronds obtained their maximum size. It was greatest between September and October overall. At Point Cabrillo, the northern California site, sea palms trimmed in late July for either the first or second time had dramatically reduced reproductive output in September, compared to those not harvested at all. At the southern site, observations made in October were qualitatively similar.  
 
 \newpage
+
 # Interannual variation in monthly nitrogen availablity from coastal upwelling
 
 One possible contributing factor to the variations among years in individual biomass, size, and reproductive status is the availability of nitrogen delivered through coastal upwelling during the growth season. The annual frequency, duration, and seasonal timing of coastal upwelling, which delivers cold, nutrient-rich waters to coastal ecosystems, are important drivers of marine primary productivity in northern California marine ecosystems. 
@@ -545,7 +597,7 @@ One possible contributing factor to the variations among years in individual bio
 In 2009 nitrogen supply as indexed by BEUTI (Biologically Effective Upwelling Transport Index) [(Jacox et al. 2018)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JC014187) was reduced during June and July compared to 2007 and 2008 (Figure \@ref(fig:barplots). This may have had a negative influence on growth and production of *Postelsia* in 2009. Additional explanatory information on the BEUTI index is available [here](https://mjacox.com/upwelling-indices/).  
 
 
-```{r barplots, fig.width = 3,  fig.height = 8, fig.cap="Biologically Effective Upwelling Transport Index (BEUTI) for 2007, 2008, and 2009.", Include=T }
+```{r barplots, fig.width = 4,  fig.height = 8, fig.cap="Biologically Effective Upwelling Transport Index (BEUTI) for 2007, 2008, and 2009.", Include=T }
 
 # cbbindex %>%
 #   ggplot(aes(x=cuti,y=month)) +
@@ -605,7 +657,7 @@ It is possible to (re-)establish new populations of *Postelsia* by attaching fer
 
 \newpage
 
-# Methods summary for the unpublished data and new analyses presented in this document
+# Methods summary for unpublished data and new analyses
 
 Individual populations were monitored at four different sites in Sonoma and Marin counties in California for three years. Populations were selected based on ability to safely access them and make measurements. As a consequence, the most wave exposed populations, and those lowest in the intertidal zone, were not well represented in this study. We also did not target populations distributed at the upper most fringe of the species intertidal distribution. WIthin each site, populations were randomly assigned as either controls or to have their fronds trimmed in each of three years (2007, 2008, 2009). Ten visually representative plants from each population were haphazardly selected and their stipe diameters were measured at the base of the stipe immediately above the haptera of the holdfast. Tidal height of each population was measured using a stadia rod and level scope with reference to a local still water level at a known time and scaled using local tidal height predictions.   
 
@@ -615,7 +667,7 @@ We modeled juvenile recruitment (June population size) using linear mixed models
 
 # References  
 
-Please see this [zotero library](https://www.zotero.org/groups/4289135/postelsia_palmaeformis/library).  
+Please see this [Zotero library](https://www.zotero.org/groups/4289135/postelsia_palmaeformis/library).  
 
 
 
