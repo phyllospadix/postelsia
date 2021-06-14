@@ -8,7 +8,9 @@ knit: (function(input_file, encoding) {
 author: "Karina J. Nielsen"
 date: "Last compiled on `r format(Sys.time(), '%d %B %Y')`"
 output:
-   bookdown::html_document2: default
+   bookdown::html_document2: 
+   toc: true
+
 ---
 
 ```{r setup, include=FALSE}
@@ -190,14 +192,14 @@ summary(ddwmodel)
 
 ```
 
-## Introduction
+# Introduction
 This document presents a summary of published research on the ecology of intertidal sea palm kelp *Postelsia palmaeformis* (hereafter *Postelsia*) together with new analyses of unpublished data collected by [Sarah Ann Thompson](http://www.faralloninstitute.org/sarah-ann), Heather Knoll, [Carol Blanchette](https://vesr.nrs.ucsb.edu/about/people/dr-carol-blanchette), and [Karina Nielsen](https://karinanielsen.io/) as part of a [CA Sea Grant funded research project](https://caseagrant.ucsd.edu/sites/default/files/RCZ-200-Nielsen.pdf) to KN and CB. The focus of that project was to examine the effects of artisanal commercial harvesting in California on *Postelsia*.
 
 The California Fish and Game Commission is receiving requests to limit commercial seaweed harvesting in response to the collapse of *Nereocystis leutkeana* bull kelp forests [(McPherson et al. 2021)](https://www.nature.com/articles/s42003-021-01827-6) and concerns that there may be a concurrent decline of *Postelsia* populations in some locations. In addition a [proposal](https://static1.squarespace.com/static/5db26a9129f30174496b208b/t/608106c52665aa1e0bb1ab43/1619068616608/DRAFT+Tribal+Proposal+for+Amending+Commercial+Kelp+%26+Seaweed+Rules-Updated+4.21.2021-PDF.pdf) developed by the [Intertribal Sinkyone Wilderness Council](https://sinkyone.org/) for a moratorium on commercial harvesting of these two species has also been submitted for consideration. 
 
 This summary is presented as an open science project to support stewardship decisions and provide stakeholders with available scientific information on *Postelsia*. The data and code used to create this document and conduct analyses of unpublished data are available in [this public repository](https://github.com/phyllospadix/postelsia). The new analyses of unpublished data presented here have not been peer-reviewed.        
 
-## Biology and ecology
+# Biology and ecology
 
 The [sea palm *Postelsia palmaeformis*](https://marine.ucsc.edu/target/target-species-postelsia.html) is an intertidal kelp (a brown macroalga in the Order Laminariales). It is only found on the west coast of North America. It grows a robust holdfast to attach to the rocks or mussels or barnacles where it settles. It has a hollow tubular stem-like stipe topped with a mop-like profusion of ridged blades (or fronds).   
 
@@ -221,19 +223,19 @@ Sea palm populations are patchily distributed in the intertidal zone of very wav
 
 \newpage
 
-## Human use and regulations for collecting and harvesting *Postelsia*
+# Human use and regulations for collecting and harvesting *Postelsia*
 
 *Postelsia* and other seaweeds are traditional foods eaten by Indigenous Peoples [(Tolowa Dee-ni' Nation, et al. 2017)](https://caseagrant.ucsd.edu/sites/default/files/39-Rocha-Final.pdf). Edible seaweeds, including *Postelsia*, are also an increasingly popular commercialized food product. The harvest of edible seaweeds in California has increased over the last two decades. Commercial seaweed harvesting is not permitted in Oregon, Washington, and British Columbia.   
 
 
-![**Commercial edible algae harvest logbook data, 1997-2019, CDFW**)](https://wildlife.ca.gov/portals/0/Images/marine/Kelp/EdibleHarvestData_12-14-20.png)  
+![**Commercial edible algae harvest logbook data, 1997-2019, [CDFW](https://wildlife.ca.gov/Conservation/Marine/Kelp/Commercial-Harvest)**)](https://wildlife.ca.gov/portals/0/Images/marine/Kelp/EdibleHarvestData_12-14-20.png)  
 
 
 In California, [recreational harvest](https://wildlife.ca.gov/Conservation/Marine/Kelp/Recreational-Harvest) of *Postelsia* is prohibited, [scientific collections](https://wildlife.ca.gov/Licensing/Scientific-Collecting) require a special authorization, and non-mechanized [commercial harvest](https://wildlife.ca.gov/Conservation/Marine/Kelp/Commercial-Harvest) is allowed with the purchase of a commercial edible seaweed harvesting license. However, there is also no recognition in California regulations of Indigenous Peoples rights to traditional use of *Postelsia* and other seaweeds. The number of commercial seaweed harvesting licenses, the amount of *Postelsia* harvested, the method of its harvest, and the locations where harvesting is allowed, except for marine protected areas, are not regulated. 
 
 \newpage
 
-## The effect of frond harvesting on juvenile recruitment 
+# The effect of frond harvesting on juvenile recruitment 
 
 In 2010 Thompson et al. reported on two experiments done to evaluate the ecological consequences of commercial frond harvesting on *Postelsia*. Commercial harvesters use a frond trimming method they claim is sustainable because the fronds regrow and allows multiple harvests per year. The research team from Thompson et al. wondered if repeated harvests might reduce reproductive output and possibly reduce juvenile recruitment (population size in June) in the following year.   
 
@@ -258,7 +260,7 @@ anova(pop_model)
 ```
 
 
-### Mixed model analysis of juvenile recruitment into *Postelsia* populations  
+## Mixed model analysis of juvenile recruitment into *Postelsia* populations  
 
 ```{r pop-table, message = FALSE, Include = TRUE}
 
@@ -275,7 +277,7 @@ tab_model(pop_model)
 ```
 
 
-### Mixed model effects and 95% confidence bands from the mixed model analysis of juvenile recruitment      
+## Mixed model effects and 95% confidence bands from the mixed model analysis of juvenile recruitment      
 ```{r pop-plot, message = FALSE, Include = TRUE, fig.width = 8,  fig.height = 4, Include=T}
 
 pop_model_fit <- ggpredict(pop_model, terms = c("augLag", "trim_all", "yr_f"))
@@ -304,7 +306,7 @@ plot(pop_model_fit)+
 
 \newpage
 
-## Reduction of *Postelsia* population sizes between June and August 
+# Reduction of *Postelsia* population sizes between June and August 
 
 >The size of *Postelsia* populations consistently declined over the summer months of three years (2007, 2008, 2009) by about 50% with no difference among years or with respect to frond harvesting. In the figure below if a population of *Postelsia* was 1000 plants in June, it had only 573 plants in August (1000 x 0.53 + 43 = 573). 
 
@@ -348,14 +350,14 @@ If the growth or reproductive output of *Postelsia* are affected by other factor
 \newpage
 
 
-## Effects of tidal height, interannual environmental variation, and frond trimming on *Postelsia* biomass, size, and reproductive status 
+# Effects of tidal height, interannual environmental variation, and frond trimming on *Postelsia* biomass, size, and reproductive status 
 
 We suspect that variation in environmental conditions between years affects whether or not the impacts of frond harvesting affects population dynamics. Differences in water temperature, nutrients, air temperature, tidal elevation, etc. may affect growth, survivorship, or reproduction of individual thalli at different times of the year. Different factors may impact the two different life history stages. We know very little about how field conditions affect the microscopic gametophyte stages.  
 
 
 The diameter of the stipe at the base of an individual *Postelsia* thallus or "plant" is an excellent predictor of the dry weight or biomass of the plant. Measurements of stipe diameter in the field are a convenient and non-destructive way to estimate *Postelsia* growth or production without sacrificing plants. We collected 22 plants to assess the relationship between biomass.  
 
-### Relationship between *Postelsia* biomass and the diamater of the base of the stipe 
+## Relationship between *Postelsia* biomass and the diamater of the base of the stipe 
 
 ```{r trim-d, include =F}
 
@@ -394,9 +396,9 @@ This is most likely due to longer emersion times in the upper intertidal zone th
 
 \newpage
 
-### Biomass
+## Biomass
 
-#### **Mixed model analysis of *Postelsia* stipe diameter, a proxy for individual biomass**  
+### Mixed model analysis of *Postelsia* stipe diameter, a proxy for individual biomass  
 
 ```{r trim-d-table, fig.width = 6,  fig.height = 6, message=FALSE, include =TRUE}
 
@@ -413,7 +415,7 @@ tab_model(bm_model)
 ```
 
 
-#### **Mixed model effects and 95% confidence bands from the analysis of *Postelsia* stipe diameter**
+### Mixed model effects and 95% confidence bands from the analysis of *Postelsia* stipe diameter
 
 ```{r plot-bm_model-fit, fig.width = 10,  fig.height = 4, include=T }
 bm_model_fit_yr <- ggpredict(bm_model, terms = c("th", "yr_f"))
@@ -447,9 +449,9 @@ bm_plot_1 + bm_plot_2
 
 \newpage
 
-### Height
+## Height
 
-#### **Mixed model analysis of *Postelsia* stipe height**  
+### Mixed model analysis of *Postelsia* stipe height  
 
 ```{r trim-h, fig.width = 6,  fig.height = 6, include =F}
 h_model <- lmer(augH ~ trim_all + yr_f + th + (1|site_code), data = post_pop)
@@ -475,7 +477,7 @@ tab_model(h_model)
 ```
 
 
-#### **Mixed model effects and 95% confidence intervals from the analysis of *Postelsia* stipe height**
+### Mixed model effects and 95% confidence intervals from the analysis of *Postelsia* stipe height
 
 ```{r plot-h-model-fit, fig.width = 8,  fig.height = 4, Include=T }
 # h_model_fit <- ggpredict(h_model, terms = c("yr_f", "trim_all"))
@@ -518,9 +520,9 @@ h_plot_1 <-  plot(h_model_fit_yr) +
 ```
 
 \newpage
-### Reproductive status
+## Reproductive status
 
-#### **Mixed model analysis of *Postelsia* reproductive status**
+### Mixed model analysis of *Postelsia* reproductive status
 
 
 ```{r trim-pr, fig.width = 6,  fig.height = 6, include =F}
@@ -549,7 +551,7 @@ tab_model(pr_model)
 ```
 
 
-#### **Mixed model effects and 95% confidence intervals from the analysis of *Postelsia* reproductive status**
+### Mixed model effects and 95% confidence intervals from the analysis of *Postelsia* reproductive status
 
 ```{r plot-pr-model-fit, fig.width = 8,  fig.height = 4, include=T}
 pr_model_fit_yr <- ggpredict(pr_model, terms = c("yr_f"))
@@ -582,7 +584,7 @@ pr_plot_1 <-  plot(pr_model_fit_yr) +
 ```
 
 \newpage
-### Interannual variation in monthly nitrogen availablity from coastal upwelling
+## Interannual variation in monthly nitrogen availablity from coastal upwelling
 
 One possible contributing factor to these variations among years is the availability of nitrogen delivered through coastal upwelling. The annual frequency, duration, and seasonal timing of coastal upwelling, which delivers cold, nutrient-rich waters to coastal ecosystems, are important drivers of marine primary productivity in northern Calfiornia ecosystems. 
 
@@ -592,7 +594,7 @@ Warmer waters such as during recent marine heat waves [(McPherson et al. 2021)](
 
 
 
-#### **Biologically Effective Upwelling Transport Index (BEUTI) from 2007-2009**
+### Biologically Effective Upwelling Transport Index (BEUTI) from 2007-2009
 
 
 ```{r barplots, fig.width = 3,  fig.height = 8, Include=T }
@@ -632,7 +634,7 @@ p1
 
 \newpage
 
-### Previously published results on the impact of frond harvesting on frond growth and reprductive output  
+## Previously published results on the impact of frond harvesting on frond growth and reprductive output  
 
 Previously published results (Thompson et al., 2010) found that the area of fronds are smaller and reproductive output is lower overall in the southernmost site they studied (Piedras Blancas). The fronds of unharvested *Postelsia* were largest between June and July, and reached their maximum size at the southernmost site about a month earlier. Piedras Blancas was near the biogeographic range limit for the species at the time of the study and differences in environmental conditions between the regions may be contributing to these differences in ecological performance.  
 
@@ -641,13 +643,13 @@ Frond harvesting reduced frond area overall at the end of the growth season, reg
 Reproductive output of viable spores for most individuals did not begin until late July at both sites, just after the fronds obtained their maximum size. It was greatest between September and October overall. At Point Cabrillo, the northern California site, sea palms trimmed in late July for either the first or second time had dramatically reduced reproductive output in September, compared to those not harvested at all. At the southern site, observations made in October were qualitatively similar.   
 
 \newpage
-### Implications for stewardship
+## Implications for stewardship
 
 Thompson et al. (2010) discussed a range of management approaches that would apply precautionary principles to protect *Postelsia* populations from the risk of unanticipated growth in commercial seaweed harvesting. If commercial sea palm harvesting is allowed, they recommended that the non-lethal frond trimming method be required for as a condition of the commercial harvest license. They also recommended that fronds should only be harvested once a year. This probably requires spatial management since multiple commercial harvesters may collect from the same intertidal areas. Lastly, since the fronds don't readily grow back after sori develop, harvesting should be limited to spring.  
 
 Recent research on *Postelsia* metapopulation dynamics by Paine et al. (2017) showed that local populations can and do go extinct but are usually repopulated by zoospores dispersing from nearby populations. However, they also showed that populations can remain locally extinct for decades to centuries if there are no nearby populations (within 20-30 meters) to supply spores (Paine et al. 2017).   
 
-![**Annual probabilities of *Postelsia* (A) colonization and (B) extinction in habitat patches as a function of distance from the nearest occupied site. Paine et al. 2017)**](https://esajournals.onlinelibrary.wiley.com/cms/asset/744c48fe-044a-4fbc-b776-16f5c2144824/ecy1798-fig-0005-m.jpg)  
+![**Annual probabilities of *Postelsia* (A) colonization and (B) extinction in habitat patches as a function of distance from the nearest occupied site. [Paine et al. (2017)](https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecy.1798)**](https://esajournals.onlinelibrary.wiley.com/cms/asset/744c48fe-044a-4fbc-b776-16f5c2144824/ecy1798-fig-0005-m.jpg)  
 
 
 This has serious implications for the recovery of populations that have gone locally extinct, especially if the declines are widespread and there is no nearby source of spores to repopulate the location. It is possible to establish new populations of *Postelsia* by attaching fertile plants to the rocks (Paine et al. 1973, Blanchette et al. 1996) if environmental conditions are suitable.   
@@ -656,15 +658,15 @@ This has serious implications for the recovery of populations that have gone loc
 
 \newpage
 
-### Methods summary for the unpublished data and new analyses presented in this document
+# Methods summary for the unpublished data and new analyses presented in this document
 
 Individual populations were monitored at four different sites in Sonoma and Marin counties in California for three years. Populations were selected based on ability to safely access them and make measurements. As a consequence, the most wave exposed populations, and those lowest in the intertidal zone, were not well represented in this study. We also did not target populations distributed at the upper most fringe of the species intertidal distribution. WIthin each site, populations were randomly assigned as either controls or to have their fronds trimmed in each of three years (2007, 2008, 2009). Ten visually representative plants from each population were haphazardly selected and their stipe diameters were measured at the base of the stipe immediately above the haptera of the holdfast. Tidal height of each population was measured using a stadia rod and level scope with reference to a local still water level at a known time and scaled using local tidal height predictions.   
 
-#### **Data analysis** 
+## Data analysis 
 We modeled juvenile recruitment (June population size) as a function of year, to represent inter annual variation in environmental conditions, the adult population size in August of the prior year, and the harvest trimming treatment, all as fixed factors. We included site as a random factor to account for the randomization of trimming treatments within sites and the known metapopulation dynamics of populations within a local site. We did not include tidal height as a factor as it is inherently represented by the August population size. To assess plant metrics within populations (stipe diameter and height, and proportion of plants that were reproductive with visible sori) we modeled the harvest trimming treatment, tidal height, and year as fixed factors and site as a random factor. We checked model fit by visual inspection of residual plots. Interaction terms were initially included, but were dropped as they did not improve model fit and our questions of interest involved the main effects.     
 
 
-### References  
+# References  
 
 Please see this [zotero library](https://www.zotero.org/groups/4289135/postelsia_palmaeformis/library).  
 
