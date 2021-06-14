@@ -17,7 +17,7 @@ output:
 knitr::opts_chunk$set(
   echo = FALSE,
   error = TRUE,
-  fig.align = "center",
+  fig.align = "left",
   fig.width = 4,
   fig.height = 5,
   dev = "png",
@@ -129,69 +129,6 @@ mutate(cbbindex, r_month = factor(cbbindex$month, levels=c("dec",
     "jan")))
 ```
 
-```{r diam-ww-model, include =F}
-
-#fit the model
-dwmodel <- lm(log(post_sz_bm$ww)~ log(post_sz_bm$stipeD))
-
-#view the output of the model
-summary(dwmodel)
-
-```
-
-
-```{r diam-ww, fig.width = 6,  fig.height = 6, message=FALSE, include =F}
-
-diam_ww <- ggplot(post_sz_bm, aes(x=log_stipeD, y=log_ww)) +
-  geom_point( size=4, color="seagreen") +
-  geom_smooth(method=lm, se=TRUE) +
-  theme_few() 
-
-diam_ww +
-  labs(x = "log [stipe diameter (cm)]") +
-  labs(y = "log [wet weight (g)]") +
-  labs(title= "Stipe diameter at the base predicts wet weight")+
-  labs(subtitle = "wet weight(g) = 17.6 + stipe diameter(cm)^2.7, r2 = 0.99")
-
-```
-
-```{r dw-ww-model, include =F}
-
-#fit the model
-dwwwmodel <- lm(post_sz_bm$dw~ post_sz_bm$ww)
-
-#view the output of the model
-summary(dwwwmodel)
-
-```
-
-
-```{r diam-ww-fig, fig.width = 6,  fig.height = 6, message=FALSE, include =F}
-
-dw_ww <- ggplot(post_sz_bm, aes(x=ww, y=dw)) +
-  geom_point( size=4, color="seagreen") +
-  geom_smooth(method=lm, se=TRUE) +
-  theme_few()
-
-dw_ww +
-  labs(x = "wet weight (g)") +
-  labs(y = "dry weight (g)") +
-  labs(title= "Wet weight predicts dry weight")+
-  labs(subtitle = "dry weight(g) = -0.01 + 0.12*wet weight(g), r2 = 0.98")
-
-```
-
-
-```{r diam-dw-model, include =F}
-
-#fit the model
-ddwmodel <- lm(log(post_sz_bm$dw)~ log(post_sz_bm$stipeD))
-
-#view the output of the model
-summary(ddwmodel)
-
-```
-
 # Introduction
 This document presents a summary of published research on the ecology of intertidal sea palm kelp *Postelsia palmaeformis* (hereafter *Postelsia*) together with new analyses of unpublished data collected by [Sarah Ann Thompson](http://www.faralloninstitute.org/sarah-ann), Heather Knoll, [Carol Blanchette](https://vesr.nrs.ucsb.edu/about/people/dr-carol-blanchette), and [Karina Nielsen](https://karinanielsen.io/) as part of a [CA Sea Grant funded research project](https://caseagrant.ucsd.edu/sites/default/files/RCZ-200-Nielsen.pdf) to KN and CB. The focus of that project was to examine the effects of artisanal commercial harvesting in California on *Postelsia*.
 
@@ -199,21 +136,29 @@ The California Fish and Game Commission is receiving requests to limit commercia
 
 This summary is presented as an open science project to support stewardship decisions and provide stakeholders with available scientific information on *Postelsia*. The data and code used to create this document and conduct analyses of unpublished data are available in [this public repository](https://github.com/phyllospadix/postelsia). The new analyses of unpublished data presented here have not been peer-reviewed.        
 
+\newpage
 # Biology and ecology
 
-The [sea palm *Postelsia palmaeformis*](https://marine.ucsc.edu/target/target-species-postelsia.html) is an intertidal kelp (a brown macroalga in the Order Laminariales). It is only found on the west coast of North America. It grows a robust holdfast to attach to the rocks or mussels or barnacles where it settles. It has a hollow tubular stem-like stipe topped with a mop-like profusion of ridged blades (or fronds).   
+The [sea palm *Postelsia palmaeformis*](https://marine.ucsc.edu/target/target-species-postelsia.html) is an intertidal kelp (a brown macroalga in the Order Laminariales). It is only found on the west coast of North America. It grows a robust holdfast to attach to the rocks or mussels or barnacles where it settles (Figure \@ref(fig:post-anat)). It has a hollow tubular stem-like stipe topped with a mop-like profusion of ridged blades (or fronds). 
 
-![**Anatomy of *Postelsia* (illustration by Sarah Oehm)**](https://web.archive.org/web/20071006173831im_/http://www.mbari.org/staff/conn/botany/browns/saraho/morphp.jpg)  
+```{r post-anat, echo=FALSE, out.width="30%", align = "center", fig.cap="Anatomy of *Postelsia* (illustration by Sarah Oehm)."}
 
+knitr::include_graphics("https://web.archive.org/web/20071006173831im_/http://www.mbari.org/staff/conn/botany/browns/saraho/morphp.jpg")
 
-\newpage
+```
 
 *Postelsia* is an annual species with a heteromorphic life history (similar to ferns) alternating between two stages: 1) a microscopic, filamentous gametophyte and 2) a macroscopic sporophyte resembling a miniature palm tree. 
 
-![**Life history cycle of *Postelsia* (animated illustration by Sarah Oehm)**](https://web.archive.org/web/20070714142300im_/http://www.mbari.org/staff/conn/botany/browns/saraho/lifeani.gif)  
+
+*Postelsia’s* annual life history begins with the germination of haploid zoospores shed from sori (dark stripes where spores form) that develop on the fronds of mature thalli (or "plants") (Figure \@ref(fig:post-cycle)). These grow into the microscopic male and female gametophytes. Sporophytes develop from the fusion of haploid gametes when sperm from a male gametophyte fertilizes an egg on a female gametophyte. The young spororphytes become visible on the shore in clusters of small plants [in late winter](https://bodegahead.blogspot.com/search/label/postelsia). They grow rapidly and develop sori on their fronds in June, but timing varies with latitude, harvesting, and differences in environmental conditions among years (Thompson et al. 2010, Nielsen et al. unpublished data).
 
 
-*Postelsia’s* annual life history begins with the germination of haploid zoospores shed from sori (dark stripes where spores form) that develop on the fronds of mature thalli (or "plants"). These grow into the microscopic male and female gametophytes. Sporophytes develop from the fusion of haploid gametes when sperm from a male gametophyte fertilizes an egg on a female gametophyte. The young spororphytes become visible on the shore in clusters of small plants [in late winter](https://bodegahead.blogspot.com/search/label/postelsia). They grow rapidly and develop sori on their fronds in June, but timing varies with latitude, harvesting, and differences in environmental conditions among years (Thompson et al. 2010, Nielsen et al. unpublished data).
+```{r post-cycle, echo=FALSE, out.width="60%", align = "center", fig.cap="Life history cycle of *Postelsia* (animated illustration by Sarah Oehm)."}
+
+knitr::include_graphics("https://web.archive.org/web/20070714142300im_/http://www.mbari.org/staff/conn/botany/browns/saraho/lifeani.gif")
+
+```
+
 
 During summer and fall when sea palms are reproductive, spores are released during low tide dribble down the grooved fronds. They usually do not disperse further than about 1.5 meters from  the parent plants (Paine et al. 2017). When the sporophytes become reproductive, they stop investing in growth or re-growth of fronds (Nielsen et al. 2010). They do not regrow from the stipe if it is cut or breaks off. The active growth region (meristem) is located at the base of the fronds above the top of the stipe. The mature sporophytes begin obvious senesence in the late fall. Most are eventually torn off the rocks by winter storms (Dayton 1973, Paine 1979, Blanchette 1996). *Postelsia* are highly productive and their dislodged thalli help fuel wrack-dependent food webs on sandy beaches throughout the growing season (Leigh et al. 1987, Leibowitz et al. 2016).   
 
@@ -225,10 +170,14 @@ Sea palm populations are patchily distributed in the intertidal zone of very wav
 
 # Human use and regulations for collecting and harvesting *Postelsia*
 
-*Postelsia* and other seaweeds are traditional foods eaten by Indigenous Peoples [(Tolowa Dee-ni' Nation, et al. 2017)](https://caseagrant.ucsd.edu/sites/default/files/39-Rocha-Final.pdf). Edible seaweeds, including *Postelsia*, are also an increasingly popular commercialized food product. The harvest of edible seaweeds in California has increased over the last two decades. Commercial seaweed harvesting is not permitted in Oregon, Washington, and British Columbia.   
+*Postelsia* and other seaweeds are traditional foods eaten by Indigenous Peoples [(Tolowa Dee-ni' Nation, et al. 2017)](https://caseagrant.ucsd.edu/sites/default/files/39-Rocha-Final.pdf). Edible seaweeds, including *Postelsia*, are also an increasingly popular commercialized food product. The harvest of edible seaweeds in California has increased over the last two decades (Figure \@ref(fig:post-harvest)). Commercial seaweed harvesting is not permitted in Oregon, Washington, and British Columbia. 
 
 
-![**Commercial edible algae harvest logbook data, 1997-2019, [CDFW](https://wildlife.ca.gov/Conservation/Marine/Kelp/Commercial-Harvest)**)](https://wildlife.ca.gov/portals/0/Images/marine/Kelp/EdibleHarvestData_12-14-20.png)  
+```{r post-harvest, echo=FALSE, out.width="70%", fig.cap="Commercial edible algae harvest logbook data, 1997-2019, [CDFW](https://wildlife.ca.gov/Conservation/Marine/Kelp/Commercial-Harvest))."}
+
+knitr::include_graphics("https://wildlife.ca.gov/portals/0/Images/marine/Kelp/EdibleHarvestData_12-14-20.png")
+
+```
 
 
 In California, [recreational harvest](https://wildlife.ca.gov/Conservation/Marine/Kelp/Recreational-Harvest) of *Postelsia* is prohibited, [scientific collections](https://wildlife.ca.gov/Licensing/Scientific-Collecting) require a special authorization, and non-mechanized [commercial harvest](https://wildlife.ca.gov/Conservation/Marine/Kelp/Commercial-Harvest) is allowed with the purchase of a commercial edible seaweed harvesting license. However, there is also no recognition in California regulations of Indigenous Peoples rights to traditional use of *Postelsia* and other seaweeds. The number of commercial seaweed harvesting licenses, the amount of *Postelsia* harvested, the method of its harvest, and the locations where harvesting is allowed, except for marine protected areas, are not regulated. 
@@ -241,14 +190,13 @@ In 2010 Thompson et al. reported on two experiments done to evaluate the ecologi
 
 They did two studies to assess the effects of frond harvesting on *Postelsia*. First they examining how frond regrowth and reproductive output at two sites, one in central and one in northern California, were impacted by frond harvesting at different times and different frequencies over the spring and summer growth season. In a second experiment they tracked 32 *Postelsia* populations across four sites in northern California to see if frond harvesting would reduce juvenile recruitment in the following year. They repeated the harvest treatments and tracked the populations for three years. They also measured the sizes of individual thalli or "plants", determined the proportion of plants that were reproductive within each population, as well as the tidal elevation of each population.  
 
-Here we extend the analyses from the first two years (2007-2008) of these experiments, previously published by Thompson et al. (2010), with new analyses and incorporating data collected in a subsequent year(table in 4.1, figure in 4.2).    
+Here we extend the analyses from the first two years (2007-2008) of these experiments, previously published by Thompson et al. (2010), with new analyses and incorporating data collected in a subsequent year.    
 
->The size of *Postelsia* populations in August are a strong predictor of juvenile recruitment to the same locations the following year. Frond harvesting, whether done once in the spring or twice over the spring and summer reduced the size of populations between 2007 and 2008, but not between 2008 and 2009. In 2008 recruitment was 38% greater in populations not subjected to trimming and population sizes were reduced by 40-50% when trimmed. Juvenile recruitment (population sizes) were smaller overall in June 2009 relative to June 2008.   
 
 \newpage
 
 
-```{r pop, fig.width = 6,  fig.height = 6, include =F}
+```{r pop, fig.width = 6,  fig.height = 6, include =FALSE}
 
 pop_model <- lmer(jun ~ augLag + trim_all * yr_f + (1|site_code), data = post_pop)
 summary(pop_model)
@@ -260,8 +208,10 @@ anova(pop_model)
 ```
 
 
-## Mixed model analysis of juvenile recruitment into *Postelsia* populations  
+>The size of *Postelsia* populations in August were a strong predictor of juvenile recruitment to the same locations the following year (Figure \@ref(fig:pop-plot), Table 4.1). Frond harvesting, whether done once in the spring or twice over the spring and summer reduced the size of populations between 2007 and 2008, but not between 2008 and 2009. In 2008 recruitment was 38% greater in populations not subjected to trimming and population sizes were reduced by 40-50% when trimmed (Thompson et al. (2010)). Juvenile recruitment (population size) was lower overall in June 2009 relative to June 2008.   
 
+
+Table 4.1. Linear mixed model of *Postelsia* recruitment.   
 ```{r pop-table, message = FALSE, Include = TRUE}
 
 # pop_tab <- tbl_regression(pop_model)
@@ -275,10 +225,9 @@ anova(pop_model)
 tab_model(pop_model)
 
 ```
+The response variable is the abundance of juvenile *Postelsia* plants in June for each population in the study. The explanatory variables are the abundance of adult parent plants in the prior August (augLag), and indicator variable for the frond harvest treatment (trim_all, where 1 = fronds were harvested, 0 = fronds were left intact), the year (yr_f, where year was either 2008 or 2009), and an interaction term between frond harvesting and year (trim_all[1]*yr_f[[2009]). The interaction term assesses if there was a different response to the frond harvesting treatment in 2009 compared to 2008. Sites were included as a random factor to account for the stratified randomization of trimming treatments within sites and to account for any differences in metapopulation structure or dynamics among the sites.     
 
-
-## Mixed model effects and 95% confidence bands from the mixed model analysis of juvenile recruitment      
-```{r pop-plot, message = FALSE, Include = TRUE, fig.width = 8,  fig.height = 4, Include=T}
+```{r pop-plot, message = FALSE, Include = TRUE, fig.width = 8,  fig.height = 4, Include=T, fig.cap="Modeled recruitment and effects with 95% confidence bands (from the mixed model)." }
 
 pop_model_fit <- ggpredict(pop_model, terms = c("augLag", "trim_all", "yr_f"))
 
@@ -286,8 +235,8 @@ plot(pop_model_fit)+
   theme_few()+
   labs(colour="trim")+
    labs(x="August population size (prior year)")+
-   labs(y = "June population size")+
-  labs (title="Modeled recruitment")
+   labs(y = "June population size")
+   #labs (title="Modeled recruitment")
   
 
 # ggplot(pop_model_fit, aes(x, predicted, color=group)) +
@@ -301,18 +250,15 @@ plot(pop_model_fit)+
 ```
 
 
-
->In 2007, frond harvesting reduced frond sizes at the end of the growth season and dramatically reduced spore production, especially when done in the summer instead of in spring. There is strong evidence that the reduced reproductive output in 2007, due to frond harvesting, yielded lower juvenile recruitment (smaller populations) in 2008 (Thompson et al 2010). 
+>In 2007, frond harvesting reduced frond sizes at the end of the growth season and dramatically reduced spore production, especially when done in the summer instead of in spring (Thompson et al 2010). There is strong evidence that the reduced reproductive output in 2007, due to frond harvesting, yielded lower juvenile recruitment (smaller populations) in 2008 . 
 
 \newpage
 
-# Reduction of *Postelsia* population sizes between June and August 
+# Reduction of *Postelsia* population sizes during the growth season 
 
->The size of *Postelsia* populations consistently declined over the summer months of three years (2007, 2008, 2009) by about 50% with no difference among years or with respect to frond harvesting. In the figure below if a population of *Postelsia* was 1000 plants in June, it had only 573 plants in August (1000 x 0.53 + 43 = 573). 
+>The size of *Postelsia* populations consistently declined over the summer months of three years (2007, 2008, 2009) by about 50% with no difference among years or with respect to frond harvesting. As shown in \@ref(fig:popchangejun-aug) below if a population of *Postelsia* has 1000 plants in June, it will have only 573 plants by August (1000 x 0.53 + 43 = 573). 
 
-This is likely a natural thinning process driven by the dislodgement of larger or poorly-attached thalli ("plants") by waves. Crowding and resulting etiolated growth or intraspecific competition for light may also contribute. These dislodged plants fuel wrack-based food webs on sandy beaches, may help colonize other locations by transporting reproductive individuals to new locations, or may even be transported to deeper waters, contributing to carbon sequestration (Krause-Jensen & Duarte 2016, Ortega et al. 2019). By August, most populations are reproductive and will likely contribute to the next generation.   
-
-
+  
 ```{r summer-pop-decline-model, include =F}
 
 #fit the model
@@ -326,7 +272,7 @@ pred.aug <- predict(summermodel, terms = c("jun"))
 ```
 
 
-```{r popchangejun-aug, fig.width = 6,  fig.height = 5, message=F, warning=F, include =TRUE}
+```{r popchangejun-aug, fig.width = 6,  fig.height = 5, fig.cap="Decline in population size between June and August.", message=F, warning=F, include =TRUE}
 
 popJA <- ggplot(post_pop, aes(x=jun, y=aug)) +
   geom_point( size=2, color="seagreen") +
@@ -334,31 +280,53 @@ popJA <- ggplot(post_pop, aes(x=jun, y=aug)) +
   theme_few() 
 
 popJA +
-  labs(x = "population size in June (2007-2009)") +
-  labs(y = "population size in August (2007-2009)") +
-  labs(title= "Populations get smaller over the summer (~by half)")+
-  labs(subtitle = "August = 43 + 0.53*June, r2 = 0.86")
+  labs(x = "population size in June (2007, 2008, 2009)") +
+  labs(y = "population size in August (2007, 2008, 2009)") +
+  #labs(title= "Populations get smaller over the summer (~by half)")+
+  labs(subtitle = "August population size = 43 + 0.53 x June population size, r2 = 0.86")
   
 
 
 ```
 
-
-
-If the growth or reproductive output of *Postelsia* are affected by other factors over the growth season, such as harvesting fronds, or poor environmental conditions, or multiple impacts, then population sizes may be reduced. If the frequency of "bad years" increases, especially in combination with cumulative annual impacts, larger scale and longer term losses might be anticipated.   
+This is likely a natural thinning process driven by the dislodgement of larger or poorly-attached thalli ("plants") by waves. Crowding and resulting etiolated growth or intra-specific competition for light may also contribute. These dislodged plants fuel wrack-based food webs on sandy beaches, may help colonize other locations by transporting reproductive individuals to new locations, or may even be transported to deeper waters, contributing to carbon sequestration (Krause-Jensen & Duarte 2016, Ortega et al. 2019). By August, most populations are have reproductive adults and will likely contribute to the next generation. 
 
 \newpage
 
 
-# Effects of tidal height, interannual environmental variation, and frond trimming on *Postelsia* biomass, size, and reproductive status 
+# Effects of tidal height, interannual environmental variation, and frond trimming on individuals 
 
-We suspect that variation in environmental conditions between years affects whether or not the impacts of frond harvesting affects population dynamics. Differences in water temperature, nutrients, air temperature, tidal elevation, etc. may affect growth, survivorship, or reproduction of individual thalli at different times of the year. Different factors may impact the two different life history stages. We know very little about how field conditions affect the microscopic gametophyte stages.  
+We suspect that variation in environmental conditions between years affects whether frond harvesting affects population dynamics. Differences in water temperature, nutrients, air temperature, tidal elevation, etc. may affect growth, survivorship, or the reproductive potential of individual plants at different times of the year. Different environmental factors may impact the two different life history stages at different times of year as well. We know very little about how field conditions affect the microscopic gametophyte stages.  
 
 
-The diameter of the stipe at the base of an individual *Postelsia* thallus or "plant" is an excellent predictor of the dry weight or biomass of the plant. Measurements of stipe diameter in the field are a convenient and non-destructive way to estimate *Postelsia* growth or production without sacrificing plants. We collected 22 plants to assess the relationship between biomass.  
+## Biomass
+The diameter of the base of the stipe of an individual *Postelsia* thallus or "plant" is an excellent predictor of the dry weight or biomass of the plant (Figure \@ref(fig:diam-dw-fig)). Measurements of stipe diameter in the field are a convenient and non-destructive way to estimate *Postelsia* growth or production without sacrificing plants. We collected 22 plants to assess the relationship between biomass.  
 
-## Relationship between *Postelsia* biomass and the diamater of the base of the stipe 
 
+```{r diam-dw-model, include =F}
+
+#fit the model
+ddwmodel <- lm(log(post_sz_bm$dw)~ log(post_sz_bm$stipeD))
+
+#view the output of the model
+summary(ddwmodel)
+
+```
+
+```{r diam-dw-fig, fig.width = 5,  fig.height = 5, fig.cap=" Relationship between *Postelsia* biomass and stipe diameter", message=FALSE, include=TRUE}
+
+diam_dw <- ggplot(post_sz_bm, aes(x=log_stipeD, y=log_dw)) +
+  geom_point( size=2, color="seagreen") +
+  geom_smooth(method=lm, se=TRUE) +
+  theme_few() 
+
+diam_dw +
+  labs(x = "log [stipe diameter (cm)]") +
+  labs(y = "log [dry weight (g)]") +
+  # labs(title= "Postelsia stipe diameter predicts biomass")+
+  labs(subtitle = "dry weight(g) = 2.19 + stipe diameter(cm)^2.7, r2 = 0.99")
+
+```
 ```{r trim-d, include =F}
 
 bm_model <- lmer(augD ~ trim_all + yr_f + th +(1|site_code), data = post_pop)
@@ -371,35 +339,19 @@ confint(bm_model)
 
 ```
 
-```{r diam-dw-fig, fig.width = 5,  fig.height = 5, message=FALSE, include=TRUE}
 
-diam_dw <- ggplot(post_sz_bm, aes(x=log_stipeD, y=log_dw)) +
-  geom_point( size=2, color="seagreen") +
-  geom_smooth(method=lm, se=TRUE) +
-  theme_few() 
 
-diam_dw +
-  labs(x = "log [stipe diameter (cm)]") +
-  labs(y = "log [dry weight (g)]") +
-  labs(title= "Postelsia stipe diameter predicts biomass")+
-  labs(subtitle = "dry weight(g) = 2.19 + stipe diameter(cm)^2.7, r2 = 0.99")
-
-```
-
->Using stipe diameter as a proxy for biomass, we found that plants from populations higher in the intertidal zone produced less biomass than those lower in the intertidal zone, consistent with prior research (Nielsen et al. 2006). 
+>Using stipe diameter as a proxy for biomass, we found that plants from populations higher in the intertidal zone produced less biomass than those lower in the intertidal zone (Figure \@ref(fig:plot-bm-model-fit, Table 6.1), consistent with prior research (Nielsen et al. 2006). 
 
 This is most likely due to longer emersion times in the upper intertidal zone that reduce access to nutrients in the water, exposes the plants to atmospheric conditions for longer periods of time, resulting in additional desiccation and heat stress. *Postelsia* growing higher on the shore have lower nitrogen content and higher C:N ratios than those lower in the shore (Nielsen et al. 2006).  
 
->In addition, variation in annual conditions affected stipe diameter, the height of plants, and their reproductive status in August, the end of the annual growth season. Plants in 2009 were shorter, produced less biomass and had a smaller proportion of individuals with visible sori (where spores are formed).  
+>In addition, variation in annual conditions affected stipe diameter, the height of plants, and their reproductive status at the end of the annual growth season. Plants in 2009 produced less biomass, were shorter, and had a smaller proportion of individuals with visible sori (where spores are formed) (Figures \@ref(fig:plot-bm-model-fit), \@ref(fig:plot-h-model-fit), and \@ref(fig:plot-pr-model-fit)).  
 
->Those that had their fronds harvested had less biomass in August, but the statistical evidence for this was moderate. They were also shorter and had a smaller proportion of individuals with visible sori. Over the range of tidal heights examined in this study, we did not see variation in plant height or reproductive status with tidal height. However, this study was not set up to examine tidal height variation per se, so this is not an unexpected result for these metrics.  
+>Those that had their fronds harvested had less biomass in August, but the statistical evidence for this was moderate (Figure \@ref(fig:pop-plot), Table 6.1). They were also shorter and had a smaller proportion of individuals with visible sori (Figures \@ref(fig:h-plot) and \@ref(fig:pr-plot)). Over the range of tidal heights examined in this study, we did not see variation in plant height or reproductive status with tidal height (Tables 6.2 and 6.3). However, this study was not set up to examine tidal height variation per se, so this is not an unexpected result for these metrics.  
 
-\newpage
 
-## Biomass
 
-### Mixed model analysis of *Postelsia* stipe diameter, a proxy for individual biomass  
-
+Table 6.1. Linear mixed model of *Postelsia* stipe diameter, a proxy for biomass. 
 ```{r trim-d-table, fig.width = 6,  fig.height = 6, message=FALSE, include =TRUE}
 
 # bm_tab <- tbl_regression(bm_model)
@@ -413,11 +365,10 @@ This is most likely due to longer emersion times in the upper intertidal zone th
 tab_model(bm_model)
 
 ```
+The response variable is the stipe diameter of adult *Postelsia* plants in August, the end of the growth season. The explanatory variables are tidal height of the population (th), and indicator variable for the frond harvest treatment (trim_all, where 1 = fronds were harvested, 0 = fronds were left intact), the year (yr_f, where year is 2007, 2008 or 2009). Sites were included as a random factor to account for the stratified randomization of trimming treatments within sites and to account for any differences in environmental conditions among sites that might affect individual performance. 
 
 
-### Mixed model effects and 95% confidence bands from the analysis of *Postelsia* stipe diameter
-
-```{r plot-bm_model-fit, fig.width = 10,  fig.height = 4, include=T }
+```{r plot-bm-model-fit, fig.width = 10,  fig.height = 4, fig.cap="Modeled stipe diameter and effects with 95% confidence bands (from the mixed model). A) effect of year and B) effect of frond harvesting (where=1 indicates trimmed, and 0 = not trimmed)", include=T }
 bm_model_fit_yr <- ggpredict(bm_model, terms = c("th", "yr_f"))
 bm_model_fit_trim <- ggpredict(bm_model, terms = c("th", "trim_all"))
 
@@ -426,14 +377,14 @@ bm_plot_1 <-  plot(bm_model_fit_yr) +
   labs(x="tidal height (ft) MLLW")+
   labs(y = "diameter (mm)")+
   labs(colour="year")+
-  labs(title = "Modeled stipe diameter in August")
+  labs(title = "A")
 
 bm_plot_2 <- plot(bm_model_fit_trim) +
    theme_few()+
   labs(x="tidal height (ft) MLLW")+
-  labs(y = "diameter (mm)")+
+  labs(y = NULL)+
   labs(colour="trim")+
-  labs(title = "Modeled stipe diameter in August")
+  labs(title = "B")
 
 bm_plot_1 + bm_plot_2
 
@@ -449,9 +400,8 @@ bm_plot_1 + bm_plot_2
 
 \newpage
 
-## Height
+## Size (height)
 
-### Mixed model analysis of *Postelsia* stipe height  
 
 ```{r trim-h, fig.width = 6,  fig.height = 6, include =F}
 h_model <- lmer(augH ~ trim_all + yr_f + th + (1|site_code), data = post_pop)
@@ -462,7 +412,7 @@ coef(h_model)
 confint(h_model)
 ```
 
-
+Table 6.2. Linear mixed model of *Postelsia* size (height).
 ```{r trim-h-table, fig.width = 6,  fig.height = 6, message = FALSE, Include=T }
 # h_tab <- tbl_regression(h_model)
 # 
@@ -475,11 +425,10 @@ confint(h_model)
 tab_model(h_model)
 
 ```
+The response variable is the stipe height of adult *Postelsia* plants in August, the end of the growth season. The explanatory variables are as in Table. 6.1.  
 
 
-### Mixed model effects and 95% confidence intervals from the analysis of *Postelsia* stipe height
-
-```{r plot-h-model-fit, fig.width = 8,  fig.height = 4, Include=T }
+```{r plot-h-model-fit, fig.width = 8,  fig.height = 4, fig.cap="Modeled stipe height and effects of year and frond harvesting with 95% confidence intervals (from the mixed model). A) effect of year and B) effect of frond harvesting (where=1 indicates trimmed, and 0 = not trimmed)", Include=T }
 # h_model_fit <- ggpredict(h_model, terms = c("yr_f", "trim_all"))
 # 
 #  plot(h_model_fit) +
@@ -497,14 +446,14 @@ h_plot_1 <-  plot(h_model_fit_yr) +
   labs(x="year")+
   labs(y = "height (cm) +/- 95% CI")+
   labs(colour="trim")+
-  labs(title = NULL)
+  labs(title = "A")
  
  h_plot_2 <- plot(h_model_fit_trim) +
   theme_few()+
   labs(x="control = 0, trimmed = 1")+
   labs(y = NULL)+
   labs(colour="trim")+
-  labs(title = NULL)
+  labs(title = "B")
  
  h_plot_1 + h_plot_2
  
@@ -518,11 +467,9 @@ h_plot_1 <-  plot(h_model_fit_yr) +
 #   labs (colour = "trim")
 
 ```
-
 \newpage
-## Reproductive status
 
-### Mixed model analysis of *Postelsia* reproductive status
+##Reproductive status  
 
 
 ```{r trim-pr, fig.width = 6,  fig.height = 6, include =F}
@@ -536,6 +483,7 @@ coef(pr_model)
 
 ```
 
+Table 6.3. Linear mixed model of *Postelsia* reproductive status.
 ```{r trim-pr-table, message = FALSE, Include=TRUE}
 
 # pr_tab <- tbl_regression(pr_model, exp=TRUE)
@@ -549,11 +497,10 @@ coef(pr_model)
 tab_model(pr_model)
 
 ```
+The response variable is the proportion of adult *Postelsia* plants that had visible sori in August. The explanatory variables are as in Table. 6.1.    
 
 
-### Mixed model effects and 95% confidence intervals from the analysis of *Postelsia* reproductive status
-
-```{r plot-pr-model-fit, fig.width = 8,  fig.height = 4, include=T}
+```{r plot-pr-model-fit, fig.width = 8,  fig.height = 4, fig.cap="Modeled reproductive status and effects of year and frond harvesting with 95% confidence intervals (from the mixed model). A) effect of year and B) effect of frond harvesting (where=1 indicates trimmed, and 0 = not trimmed)", include=T}
 pr_model_fit_yr <- ggpredict(pr_model, terms = c("yr_f"))
 pr_model_fit_trim <- ggpredict(pr_model, terms = c("trim_all"))
 
@@ -562,14 +509,14 @@ pr_plot_1 <-  plot(pr_model_fit_yr) +
   labs(x="year")+
   labs(y = "reproductive thalli (+/- 95% CI")+
   labs(colour="trim")+
-  labs(title = NULL)
+  labs(title = "A")
  
  pr_plot_2 <- plot(pr_model_fit_trim) +
   theme_few()+
   labs(x="control = 0, trimmed = 1")+
   labs(y = NULL)+
   labs(colour="triml")+
-  labs(title = NULL)
+  labs(title = "B")
  
  pr_plot_1 + pr_plot_2
  
@@ -582,22 +529,23 @@ pr_plot_1 <-  plot(pr_model_fit_yr) +
 #   labs (colour = "trim")
 
 ```
+# Impact of frond harvesting on frond growth and reproductive output  
+
+Previously published results (Thompson et al., 2010) found that the area of fronds are smaller and reproductive output is lower overall in the southernmost site they studied (Piedras Blancas). The fronds of unharvested *Postelsia* were largest between June and July, and reached their maximum size at the southernmost site about a month earlier. Piedras Blancas was near the biogeographic range limit for the species at the time of the study and differences in environmental conditions between the regions may be contributing to these differences in ecological performance.  
+
+Frond harvesting reduced frond area overall at the end of the growth season, regardless of when trimming was done or how often it was done. Fronds cut in the spring were able to regrow, while those cut in late July, after the onset of reproduction, did not (Thompson et al., 2010).   
+
+Reproductive output of viable spores for most individuals did not begin until late July at both sites, just after the fronds obtained their maximum size. It was greatest between September and October overall. At Point Cabrillo, the northern California site, sea palms trimmed in late July for either the first or second time had dramatically reduced reproductive output in September, compared to those not harvested at all. At the southern site, observations made in October were qualitatively similar.  
 
 \newpage
-## Interannual variation in monthly nitrogen availablity from coastal upwelling
+# Interannual variation in monthly nitrogen availablity from coastal upwelling
 
-One possible contributing factor to these variations among years is the availability of nitrogen delivered through coastal upwelling. The annual frequency, duration, and seasonal timing of coastal upwelling, which delivers cold, nutrient-rich waters to coastal ecosystems, are important drivers of marine primary productivity in northern Calfiornia ecosystems. 
+One possible contributing factor to the variations among years in individual biomass, size, and reproductive status is the availability of nitrogen delivered through coastal upwelling during the growth season. The annual frequency, duration, and seasonal timing of coastal upwelling, which delivers cold, nutrient-rich waters to coastal ecosystems, are important drivers of marine primary productivity in northern California marine ecosystems. 
 
-In 2009 nitrogen supply as indexed by BEUTI (Biologically Effective Upwelling Transport Index) [(Jacox et al. 2018)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JC014187) was reduced during June and July compared to 2007 and 2008. This may have had a negative influence on growth and production of *Postelsia* in 2009. Additional explanatory information on the BEUTI index is available [here](https://mjacox.com/upwelling-indices/).  
-
-Warmer waters such as during recent marine heat waves [(McPherson et al. 2021)](https://www.nature.com/articles/s42003-021-01827-6) may also have a negative impact on *Postelsia*. A study of temperature tolerances of seaweeds (Lüning & Freshwater 1988) determined that *Postelsia* do not survive in waters above 15 °C. Sub-lethal effects of warmer waters may occur at somewhat lower temperatures.  
+In 2009 nitrogen supply as indexed by BEUTI (Biologically Effective Upwelling Transport Index) [(Jacox et al. 2018)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JC014187) was reduced during June and July compared to 2007 and 2008 (Figure \@ref(fig:barplots). This may have had a negative influence on growth and production of *Postelsia* in 2009. Additional explanatory information on the BEUTI index is available [here](https://mjacox.com/upwelling-indices/).  
 
 
-
-### Biologically Effective Upwelling Transport Index (BEUTI) from 2007-2009
-
-
-```{r barplots, fig.width = 3,  fig.height = 8, Include=T }
+```{r barplots, fig.width = 3,  fig.height = 8, fig.cap="Biologically Effective Upwelling Transport Index (BEUTI) for 2007, 2008, and 2009.", Include=T }
 
 # cbbindex %>%
 #   ggplot(aes(x=cuti,y=month)) +
@@ -630,29 +578,28 @@ p1
 
 ```
 
+Warmer waters such as during recent marine heat waves [(McPherson et al. 2021)](https://www.nature.com/articles/s42003-021-01827-6) may also have a negative impact on *Postelsia*. A study of temperature tolerances of seaweeds (Lüning & Freshwater 1988) determined that *Postelsia* do not survive in waters above 15 °C. Sub-lethal effects of warmer waters may occur at somewhat lower temperatures.  
 
 
 \newpage
+# Implications for stewardship
 
-## Previously published results on the impact of frond harvesting on frond growth and reprductive output  
-
-Previously published results (Thompson et al., 2010) found that the area of fronds are smaller and reproductive output is lower overall in the southernmost site they studied (Piedras Blancas). The fronds of unharvested *Postelsia* were largest between June and July, and reached their maximum size at the southernmost site about a month earlier. Piedras Blancas was near the biogeographic range limit for the species at the time of the study and differences in environmental conditions between the regions may be contributing to these differences in ecological performance.  
-
-Frond harvesting reduced frond area overall at the end of the growth season, regardless of when trimming was done or how often it was done. Fronds cut in the spring were able to regrow, while those cut in late July, after the onset of reproduction, did not (Thompson et al., 2010).   
-
-Reproductive output of viable spores for most individuals did not begin until late July at both sites, just after the fronds obtained their maximum size. It was greatest between September and October overall. At Point Cabrillo, the northern California site, sea palms trimmed in late July for either the first or second time had dramatically reduced reproductive output in September, compared to those not harvested at all. At the southern site, observations made in October were qualitatively similar.   
-
-\newpage
-## Implications for stewardship
+If the growth or reproductive output of *Postelsia* are affected by multiple impacts or stressors over the growth season, then population sizes may be reduced in subsequent years. If the frequency of "bad years" increases or bad conditions persist for longer during the growth season, especially in combination with other factors that reduce vital rates, then larger scale and longer term losses might be anticipated.
 
 Thompson et al. (2010) discussed a range of management approaches that would apply precautionary principles to protect *Postelsia* populations from the risk of unanticipated growth in commercial seaweed harvesting. If commercial sea palm harvesting is allowed, they recommended that the non-lethal frond trimming method be required for as a condition of the commercial harvest license. They also recommended that fronds should only be harvested once a year. This probably requires spatial management since multiple commercial harvesters may collect from the same intertidal areas. Lastly, since the fronds don't readily grow back after sori develop, harvesting should be limited to spring.  
 
-Recent research on *Postelsia* metapopulation dynamics by Paine et al. (2017) showed that local populations can and do go extinct but are usually repopulated by zoospores dispersing from nearby populations. However, they also showed that populations can remain locally extinct for decades to centuries if there are no nearby populations (within 20-30 meters) to supply spores (Paine et al. 2017).   
+Additionally, recent research on *Postelsia* metapopulation dynamics by Paine et al. (2017) shows that local populations can and do go extinct but are usually repopulated by zoospores dispersing from nearby populations (Figure \@ref(fig:post-extinct)). However, they also showed that populations can remain locally extinct for decades to centuries if there are no nearby populations (within 20-30 meters) to supply spores (Paine et al. 2017).   
 
-![**Annual probabilities of *Postelsia* (A) colonization and (B) extinction in habitat patches as a function of distance from the nearest occupied site. [Paine et al. (2017)](https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecy.1798)**](https://esajournals.onlinelibrary.wiley.com/cms/asset/744c48fe-044a-4fbc-b776-16f5c2144824/ecy1798-fig-0005-m.jpg){width=50%}  
+```{r post-extinct, echo=FALSE, out.width="50%", fig.cap="Annual probabilities of *Postelsia* (A) colonization and (B) extinction in habitat patches as a function of distance from the nearest occupied site. [Paine et al. (2017)](https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecy.1798)."}
+
+knitr::include_graphics("https://esajournals.onlinelibrary.wiley.com/cms/asset/744c48fe-044a-4fbc-b776-16f5c2144824/ecy1798-fig-0005-m.jpg")
+
+```
 
 
-This has serious implications for the recovery of populations that have gone locally extinct, especially if the declines are widespread and there is no nearby source of spores to repopulate the location. It is possible to establish new populations of *Postelsia* by attaching fertile plants to the rocks (Paine et al. 1973, Blanchette et al. 1996) if environmental conditions are suitable.   
+This has serious implications for the recovery of populations that have gone locally extinct, especially if the declines are widespread and there is no nearby source of spores to repopulate the location. WHile rafting of fertile plants from other sites does occur, it is rare over ecological time scales (Paine et al. 2017).    
+
+It is possible to (re-)establish new populations of *Postelsia* by attaching fertile plants from another location to the rocks if the environmental conditions are suitable (as was done in experiments by Paine et al. 1973, Blanchette et al. 1996 in WA and OR, respectively). However, the methods are labor intensive and involve working on some of the most wave-exposed rocky shores in the region.      
 
 > A precautionary approach to the stewardship of *Postelsia palmaeformis* is warranted.    
 
@@ -662,8 +609,8 @@ This has serious implications for the recovery of populations that have gone loc
 
 Individual populations were monitored at four different sites in Sonoma and Marin counties in California for three years. Populations were selected based on ability to safely access them and make measurements. As a consequence, the most wave exposed populations, and those lowest in the intertidal zone, were not well represented in this study. We also did not target populations distributed at the upper most fringe of the species intertidal distribution. WIthin each site, populations were randomly assigned as either controls or to have their fronds trimmed in each of three years (2007, 2008, 2009). Ten visually representative plants from each population were haphazardly selected and their stipe diameters were measured at the base of the stipe immediately above the haptera of the holdfast. Tidal height of each population was measured using a stadia rod and level scope with reference to a local still water level at a known time and scaled using local tidal height predictions.   
 
-## Data analysis 
-We modeled juvenile recruitment (June population size) as a function of year, to represent inter annual variation in environmental conditions, the adult population size in August of the prior year, and the harvest trimming treatment, all as fixed factors. We included site as a random factor to account for the randomization of trimming treatments within sites and the known metapopulation dynamics of populations within a local site. We did not include tidal height as a factor as it is inherently represented by the August population size. To assess plant metrics within populations (stipe diameter and height, and proportion of plants that were reproductive with visible sori) we modeled the harvest trimming treatment, tidal height, and year as fixed factors and site as a random factor. We checked model fit by visual inspection of residual plots. Interaction terms were initially included, but were dropped as they did not improve model fit and our questions of interest involved the main effects.     
+
+We modeled juvenile recruitment (June population size) using linear mixed models with year (to represent inter annual variation in environmental conditions), the adult population size in August of the prior year, and the frond harvest treatment as fixed factors. We included site as a random factor to account for the randomization of trimming treatments within sites and the known metapopulation dynamics of populations within a local site. We did not include tidal height as a factor as it is inherently represented by the August population size. To assess individual plant metrics within populations (stipe diameter and height, and proportion of plants that were reproductive with visible sori) we modeled the frond harvest treatment, tidal height, and year as fixed factors and site as a random factor. We checked model fit by visual inspection of residual plots. Interaction terms were initially included, but were dropped if they did not improve model fit as our questions of interest involved the main effects.     
 
 
 # References  
