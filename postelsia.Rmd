@@ -256,7 +256,7 @@ plot(pop_model_fit)+
 
 # Reduction of *Postelsia* population sizes during the growth season 
 
->The size of *Postelsia* populations consistently declined over the summer months of three years (2007, 2008, 2009) by about 50% with no difference among years or with respect to frond harvesting. As shown in \@ref(fig:popchangejun-aug) below if a population of *Postelsia* has 1000 plants in June, it will have only 573 plants by August (1000 x 0.53 + 43 = 573). 
+>The size of *Postelsia* populations consistently declined over the summer months of three years (2007, 2008, 2009) by about 50% with no difference among years or with respect to frond harvesting. As shown in Figure \@ref(fig:popchangejun-aug) below if a population of *Postelsia* has 1000 plants in June, it will have only 573 plants by August (1000 x 0.53 + 43 = 573). 
 
   
 ```{r summer-pop-decline-model, include =F}
@@ -272,18 +272,18 @@ pred.aug <- predict(summermodel, terms = c("jun"))
 ```
 
 
-```{r popchangejun-aug, fig.width = 6,  fig.height = 5, fig.cap="Decline in population size between June and August.", message=F, warning=F, include =TRUE}
+```{r popchangejun-aug, fig.width = 4,  fig.height = 4, fig.cap="Decline in population size between June and August.", message=F, warning=F, include =TRUE}
 
 popJA <- ggplot(post_pop, aes(x=jun, y=aug)) +
   geom_point( size=2, color="seagreen") +
   geom_smooth(method=lm, se=TRUE) +
-  theme_few() 
+  theme_minimal() 
 
 popJA +
-  labs(x = "population size in June (2007, 2008, 2009)") +
-  labs(y = "population size in August (2007, 2008, 2009)") +
+  labs(x = "June population size (2007, 2008, 2009)") +
+  labs(y = "August population size (2007, 2008, 2009)") +
   #labs(title= "Populations get smaller over the summer (~by half)")+
-  labs(subtitle = "August population size = 43 + 0.53 x June population size, r2 = 0.86")
+  labs(subtitle = "August pop. = 43 + 0.53(June pop.), R2 = 0.86")
   
 
 
@@ -313,18 +313,18 @@ summary(ddwmodel)
 
 ```
 
-```{r diam-dw-fig, fig.width = 5,  fig.height = 5, fig.cap=" Relationship between *Postelsia* biomass and stipe diameter", message=FALSE, include=TRUE}
+```{r diam-dw-fig, fig.width = 4,  fig.height = 4, fig.cap=" Relationship between *Postelsia* biomass and stipe diameter", message=FALSE, include=TRUE}
 
 diam_dw <- ggplot(post_sz_bm, aes(x=log_stipeD, y=log_dw)) +
   geom_point( size=2, color="seagreen") +
   geom_smooth(method=lm, se=TRUE) +
-  theme_few() 
+  theme_minimal() 
 
 diam_dw +
   labs(x = "log [stipe diameter (cm)]") +
   labs(y = "log [dry weight (g)]") +
   # labs(title= "Postelsia stipe diameter predicts biomass")+
-  labs(subtitle = "dry weight(g) = 2.19 + stipe diameter(cm)^2.7, r2 = 0.99")
+  labs(subtitle = "dry weight = 2.19 + (stipe diam.)^2.7, R2 = 0.99")
 
 ```
 ```{r trim-d, include =F}
