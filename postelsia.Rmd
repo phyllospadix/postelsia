@@ -649,7 +649,7 @@ Thompson et al. (2010) discussed a range of management approaches that would app
 
 Recent research on *Postelsia* metapopulation dynamics by Paine et al. (2017) showed that local populations can and do go extinct but are usually repopulated by zoospores dispersing from nearby populations. However, they also showed that populations can remain locally extinct for decades to centuries if there are no nearby populations (within 20-30 meters) to supply spores (Paine et al. 2017).   
 
-![**Annual probabilities of *Postelsia* (A) colonization and (B) extinction in habitat patches as a function of distance from the nearest occupied site. [Paine et al. (2017)](https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecy.1798)**](https://esajournals.onlinelibrary.wiley.com/cms/asset/744c48fe-044a-4fbc-b776-16f5c2144824/ecy1798-fig-0005-m.jpg)  
+![**Annual probabilities of *Postelsia* (A) colonization and (B) extinction in habitat patches as a function of distance from the nearest occupied site. [Paine et al. (2017)](https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecy.1798)**](https://esajournals.onlinelibrary.wiley.com/cms/asset/744c48fe-044a-4fbc-b776-16f5c2144824/ecy1798-fig-0005-m.jpg){width=50%}  
 
 
 This has serious implications for the recovery of populations that have gone locally extinct, especially if the declines are widespread and there is no nearby source of spores to repopulate the location. It is possible to establish new populations of *Postelsia* by attaching fertile plants to the rocks (Paine et al. 1973, Blanchette et al. 1996) if environmental conditions are suitable.   
