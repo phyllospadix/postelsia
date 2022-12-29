@@ -54,7 +54,7 @@ here::here() # use this to work with sub-directories less awkwardly and share pr
 
 ```{r renv, include=FALSE}
 #Run this to update snapshot of packages when you commit the file
-renv::snapshot() 
+#renv::snapshot() 
 #run as needed later in the project to capture required package versions
 #NB must respond and affirms actions in console or you will see the spinning wheel....
 
@@ -63,7 +63,7 @@ renv::snapshot()
 
 ```{r read in data, include=FALSE}
 
-#read in data from googlesheet file
+0#read in data from googlesheet file
 pop_url <- "https://docs.google.com/spreadsheets/d/1UU4ZVFNtGX9wPg8YrwcVHOKCASZERbLxHoL7GWC3Hos/edit#gid=395307144"
 post_pop <- read_sheet(pop_url) # will ask for account access in console
 
@@ -636,7 +636,9 @@ Additionally, recent research on *Postelsia* metapopulation dynamics by Paine et
 
 ```{r post-extinct, echo=FALSE, out.width="50%", fig.cap="Annual probabilities of *Postelsia* (A) colonization and (B) extinction in habitat patches as a function of distance from the nearest occupied site. [Paine et al. (2017)](https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecy.1798)."}
 
-knitr::include_graphics("https://esajournals.onlinelibrary.wiley.com/cms/asset/744c48fe-044a-4fbc-b776-16f5c2144824/ecy1798-fig-0005-m.jpg")
+#knitr::include_graphics("https://esajournals.onlinelibrary.wiley.com/cms/asset/744c48fe-044a-4fbc-b776-16f5c2144824/ecy1798-fig-0005-m.jpg")
+knitr::include_graphics("images/POST_Dispersal_2017.jpg")
+
 
 ```
 
